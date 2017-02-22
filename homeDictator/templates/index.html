@@ -1,0 +1,27 @@
+<!doctype html>
+<title>Hello World!</title>
+  {% for attivita in res %}
+    <a href="/punti/{{ attivita[0] }}">{{ attivita[0] }}</a>
+  {% endfor %}
+  <br>
+  <a href="/classifica">classifica</a>
+  <br>
+  <a href="/aggiungi">aggiungi</a>
+
+<div>
+  <h1>Hello World!</h1>
+  <table>
+    <th>nome</th>
+    <th>attività</th>
+    <th>data</th>
+    <th>da fare</th>
+    {% for entry in lista %}
+      <tr>
+        <td>{{ entry.nome }}</td>
+        <td>{{ entry.attivita }}</td>
+        <td>{{ entry.data }}</td>
+        <td>{{ entry.is_old() }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>

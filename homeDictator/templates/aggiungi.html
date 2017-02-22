@@ -1,0 +1,18 @@
+<!doctype html>
+<title>Hello World!</title>
+<div>
+	<h1>aggiungi</h1>
+	<form method="POST" action="/aggiungi">
+		<select name="nome">
+		{% for nome in nomi %}
+			<option value="{{ nome[0] }}">{{ nome[0] }}</option>
+		{% endfor %}
+		</select>
+		<select name="attivita">
+		{% for a in attivita %}
+			<option value="{{ a[0] }}">{{ a[0] }}</option>
+		{% endfor %}
+		</select>
+		<button type="submit">logga</button>
+	</form>
+</div>

@@ -1,0 +1,13 @@
+<!doctype html>
+<title>Hello World!</title>
+<div>
+  <h1>punteggi</h1>
+  <table>
+  {% for entry in p.punteggi %}
+    <tr>
+      <td>{{ entry }}</td>
+      <td>{{ p.punteggi[entry] }} punti</td>
+    </tr>
+  {% endfor %}
+  </table>
+</div>
