@@ -5,4 +5,4 @@ from datetime import date
 mydb = db_manager()
 mydb.create()
 
-app.run()
+app.run(host='0.0.0.0')

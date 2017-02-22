@@ -5,7 +5,7 @@ from homeDictator.activity import activity
 from homeDictator.standings import standings
 from datetime import date
 
-app = Flask(__name__, template_folder="../homeDictator/templates")
+app = Flask(__name__, template_folder="../homeDictator/templates", static_folder="../homeDictator/static")
 
 mydb = db_manager()
 
