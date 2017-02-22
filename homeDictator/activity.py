@@ -10,3 +10,7 @@ class activity(object):
 		for riga in dati:
 			self.volte[riga[0]] = riga[1]
 
+	def get_activities():
+		config = configparser.ConfigParser()
+		config.read('homeDictator/config.ini')
+		return config.options('punti')

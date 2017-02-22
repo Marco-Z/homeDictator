@@ -36,7 +36,7 @@ def classifica():
 def aggiungi():
 	if request.method == 'GET':
 		nomi = mydb.get_names()
-		attivita = mydb.get_activities()
+		attivita = activity.get_activities()
 		return render_template('aggiungi.html', nomi=nomi, attivita=attivita)
 	else:
 		n = request.form['nome']
