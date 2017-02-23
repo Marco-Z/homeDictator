@@ -9,37 +9,26 @@ app = Flask(__name__, template_folder="../homeDictator/templates", static_folder
 
 mydb = db_manager()
 
-@app.route("/")
+@app.route("/", methods=['GET','POST'])
 def index():
+	if request.method == 'POST':
+		n = request.form['nome']
+		a = request.form['attivita']
+		mydb.insert(n,a,date.today())
 	res = mydb.retrieve_last()
 	lista = []
 	for row in res:
 		lista.append(log(row))
 	res = mydb.get_activities()
-	return render_template('index.html', lista=lista, res=res)
+	attivita = activity.get_activities()
+	lista_attivita = mydb.get_activities()
+	punteggi = standings()
+	for at in lista_attivita:
+		a = at[0]
+		punteggi.update(activity(a, mydb.get_times_for_activity(a)))
+	return render_template('index.html', lista=lista, res=res, attivita=attivita,p=punteggi)
 
 @app.route("/punti/<attivita>")
 def punti(attivita):
 	dati = activity(attivita, mydb.get_times_for_activity(attivita))
 	return render_template('punti.html',dati=dati)
-
-@app.route("/classifica")
-def classifica():
-	lista_attivita = mydb.get_activities()
-	punteggi = standings()
-	for attivita in lista_attivita:
-		a = attivita[0]
-		punteggi.update(activity(a, mydb.get_times_for_activity(a)))
-	return render_template('classifica.html',p=punteggi)
-
-@app.route("/aggiungi", methods=['GET', 'POST'])
-def aggiungi():
-	if request.method == 'GET':
-		nomi = mydb.get_names()
-		attivita = activity.get_activities()
-		return render_template('aggiungi.html', nomi=nomi, attivita=attivita)
-	else:
-		n = request.form['nome']
-		a = request.form['attivita']
-		mydb.insert(n,a,date.today())
-		return redirect(url_for('index'))
