@@ -1,0 +1,35 @@
+<!doctype html>
+<title>Hello World!</title>
+<div>
+  <h1>cancella</h1>
+  <form action="/cancella" method="POST">
+  	<table>
+	  {% for entry in lista %}
+	  	<tr>
+	  	  <td>
+			<p>
+		      <input name="attivita" type="radio" id="{{ entry.a_id }}" value="{{ entry.a_id }}" />
+		      <label for="{{ entry.a_id }}"></label>
+		    </p>
+		  </td>
+		  <td>
+		  	<p>
+		  		{{ entry.nome }}
+		  	</p>
+		  </td>
+		  <td>
+		  	<p>
+		  		{{ entry.data }}
+		  	</p>
+		  </td>
+		  <td>
+		  	<p>
+		  		{{ entry.attivita }}
+		  	</p>
+		  </td>
+	    </tr>
+	  {% endfor %}
+  	</table>
+    <input type="submit" value="Cancella">
+  </form>
+</div>
