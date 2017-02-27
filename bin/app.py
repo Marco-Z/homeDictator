@@ -32,3 +32,17 @@ def index():
 def punti(attivita):
 	dati = activity(attivita, mydb.get_times_for_activity(attivita))
 	return render_template('punti.html',dati=dati)
+
+@app.route("/cancella", methods=['GET','POST'])
+def cancella():
+	if request.method == 'POST':
+		ac = request.form['attivita']
+		print(ac)
+		mydb.delete(ac)
+		return redirect(url_for('index'))
+	else:
+		res = mydb.retrieve_all()
+		lista = []
+		for row in res:
+			lista.append(log(row))
+		return render_template('lista.html',lista=lista)

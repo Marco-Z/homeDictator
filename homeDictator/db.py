@@ -33,6 +33,13 @@ class db_manager(object):
 		self.cursor.execute(insert_command,[nome, attivita, data])
 		self.connection.commit()
 
+	def delete(self, a_id):
+		insert_command = """
+			DELETE FROM log WHERE id=?;
+			"""
+		self.cursor.execute(insert_command,[a_id])
+		self.connection.commit()
+
 	def retrieve_all(self):
 		select_command = """
 			SELECT * FROM log;
@@ -42,7 +49,7 @@ class db_manager(object):
 
 	def retrieve_last(self):
 		select_command = """
-			SELECT nome, attivita, MAX(data) AS data
+			SELECT id, nome, attivita, MAX(data) AS data
 			FROM log
 			GROUP BY attivita
 			ORDER BY data DESC;
