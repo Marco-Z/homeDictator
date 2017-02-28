@@ -50,6 +50,6 @@ def cancella():
 
 @app.route("/pull")
 def pull():
-	Popen(['pull.bat'], shell=True,
+	Popen(['./pull.bat'], shell=True,
              stdin=None, stdout=None, stderr=None, close_fds=True)
 	exit(0)
