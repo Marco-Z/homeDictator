@@ -4,6 +4,7 @@ from homeDictator.log import log
 from homeDictator.activity import activity
 from homeDictator.standings import standings
 from datetime import date
+from subprocess import Popen
 
 app = Flask(__name__, template_folder="../homeDictator/templates", static_folder="../homeDictator/static")
 
@@ -46,3 +47,9 @@ def cancella():
 		for row in res:
 			lista.append(log(row))
 		return render_template('lista.html',lista=lista)
+
+@app.route("/pull")
+def pull():
+	Popen(['./pull.bat'], shell=True,
+             stdin=None, stdout=None, stderr=None, close_fds=True)
+	exit(0)
