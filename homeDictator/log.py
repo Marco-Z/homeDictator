@@ -14,3 +14,12 @@ class log(object):
 
 	def is_old(self):
 		return(date.today()-self.data).days >= int(self.config['intervallo'][self.attivita])
+
+	def to_do():
+		res = db_manager().retrieve_last()
+		lista = []
+		for row in res:
+			activity = log(row)
+			if activity.is_old():
+				lista.append(activity)
+		return lista
