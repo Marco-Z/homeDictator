@@ -1,6 +1,7 @@
 <!doctype html>
 <head>
 	<title>homeDictator</title>
+	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
     <link href="{{ url_for('static',filename='css/materialize.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
 	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
@@ -39,6 +40,7 @@
 						</select>
 					</div>
 					<select name="attivita">
+					<option value="" disabled selected>Attività</option>
 					{% for a in attivita %}
 						<option value="{{ a }}">{{ a }}</option>
 					{% endfor %}
@@ -52,17 +54,17 @@
 				  <div id="myDiv"></div>
 				  <script>
 						var data = [{
-						x: [
-							{% for entry in p.punteggi %}
-							'{{ entry }}',
-							{% endfor %}
-						],
+						type: 'bar',
 						y: [
 							{% for entry in p.punteggi %}
 							{{ p.punteggi[entry] }},
 							{% endfor %}
 						],
-						type: 'bar'
+						x: [
+							{% for entry in p.punteggi %}
+							'{{ entry }}',
+							{% endfor %}
+						],
 						}];
 						Plotly.newPlot('myDiv', data);
 				  </script>
@@ -78,7 +80,7 @@
 						  <th data-field="nome">Nome</th>
 						  <th data-field="attivita">Attività</th>
 						  <th data-field="date">Data</th>
-						  <th data-field="isold">Da fare</th>
+						  <!-- <th data-field="isold">Da fare</th> -->
 					  </tr>
 					</thead>
 					{% for entry in lista %}
@@ -87,7 +89,7 @@
 						<td>{{ entry.nome }}</td>
 						<td>{{ entry.attivita }}</td>
 						<td>{{ entry.data }}</td>
-						<td>{{ entry.is_old() }}</td>
+						<!-- <td>{{ entry.is_old() }}</td> -->
 					  </tr>
 					</tbody>
 					{% endfor %}
