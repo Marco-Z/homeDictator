@@ -8,6 +8,8 @@ class db_manager(object):
 		self.cursor = self.connection.cursor()
 
 	def create(self):
+
+		# initialize log table
 		create_command = """
 			CREATE TABLE IF NOT EXISTS log ( 
 			id INTEGER PRIMARY KEY, 
@@ -16,13 +18,42 @@ class db_manager(object):
 			data TEXT);
 			"""
 		self.cursor.execute(create_command)
+
+		# initialize users table
+		create_users = """
+			CREATE TABLE IF NOT EXISTS users ( 
+			id INTEGER PRIMARY KEY, 
+			nome TEXT, 
+			credito REAL DEFAULT 0);
+			"""
+		self.cursor.execute(create_users)
 		self.connection.commit()
+		if len(self.cursor.execute("SELECT * FROM users;").fetchall()) == 0:
+			self.cursor.execute('INSERT INTO users (nome) VALUES ("Marco")')
+			self.cursor.execute('INSERT INTO users (nome) VALUES ("Matteo")')
+			self.cursor.execute('INSERT INTO users (nome) VALUES ("Maurizio")')
+			self.cursor.execute('INSERT INTO users (nome) VALUES ("Nicola")')
+			self.connection.commit()
+
+		# initialize cost table
+		create_command = """
+			CREATE TABLE IF NOT EXISTS cost ( 
+			id INTEGER PRIMARY KEY, 
+			creditore TEXT, 
+			importo REAL, 
+			data TEXT, 
+			descrizione TEXT);
+			"""
 
 	def reset(self):
 		delete_command = """
 			DELETE FROM log;
 			"""
 		self.cursor.execute(delete_command)
+		delete_users = """
+			DELETE FROM users;
+			"""
+		self.cursor.execute(delete_users)
 		self.connection.commit()
 
 	def insert(self, nome, attivita, data):
@@ -42,7 +73,7 @@ class db_manager(object):
 
 	def retrieve_all(self):
 		select_command = """
-			SELECT * FROM log;
+			SELECT * FROM log ORDER BY data DESC;
 			"""
 		res = self.cursor.execute(select_command)
 		return res
@@ -56,16 +87,24 @@ class db_manager(object):
 			"""
 		return self.cursor.execute(select_command)
 
+	def retrieve_debts(self):
+		select_command = "SELECT nome, credito FROM users;"
+		return self.cursor.execute(select_command).fetchall()
+
+	def update_credit(self,nome,importo):
+		print(self.cursor.execute("SELECT nome, credito FROM users WHERE nome = (?)",[nome]).fetchone())
+		update_command = """
+			UPDATE users
+			SET credito = credito + (?)
+			WHERE nome = (?);
+			"""
+		self.cursor.execute(update_command,[importo, nome])
+		self.connection.commit()
+		print(self.cursor.execute("SELECT nome, credito FROM users WHERE nome = (?)",[nome]).fetchone())
+
 	def get_activities(self):
 		select_command = """
 			SELECT DISTINCT attivita
-			FROM log;
-			"""
-		return list(self.cursor.execute(select_command))
-
-	def get_names(self):
-		select_command = """
-			SELECT DISTINCT nome
 			FROM log;
 			"""
 		return list(self.cursor.execute(select_command))

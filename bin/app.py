@@ -16,10 +16,6 @@ def index():
 		n = request.form['nome']
 		a = request.form['attivita']
 		mydb.insert(n,a,date.today())
-	res = mydb.retrieve_last()
-	lista = []
-	for row in res:
-		lista.append(log(row))
 	res = mydb.get_activities()
 	attivita = activity.get_activities()
 	lista_attivita = mydb.get_activities()
@@ -27,7 +23,8 @@ def index():
 	for at in lista_attivita:
 		a = at[0]
 		punteggi.update(activity(a, mydb.get_times_for_activity(a)))
-	return render_template('index.html', lista=lista, res=res, attivita=attivita,p=punteggi)
+	nomi = mydb.retrieve_debts()
+	return render_template('index.html', res=res, attivita=attivita,p=punteggi,nomi=nomi)
 
 @app.route("/punti/<attivita>")
 def punti(attivita):
@@ -40,13 +37,29 @@ def cancella():
 		ac = request.form['attivita']
 		print(ac)
 		mydb.delete(ac)
-		return redirect(url_for('index'))
+		return redirect(url_for('cancella'))
 	else:
 		res = mydb.retrieve_all()
 		lista = []
 		for row in res:
 			lista.append(log(row))
 		return render_template('lista.html',lista=lista)
+
+@app.route("/paga", methods=['POST'])
+def paga():
+	nome = request.form['nome']
+	importo = float(request.form['importo'])
+	desc = request.form['descrizione']
+	nomi = mydb.retrieve_debts()
+	paga = dict()
+	somma = 0
+	for n in nomi:
+		paga[n[0]] = int(request.form[n[0]])
+		somma = somma + paga[n[0]]
+	mydb.update_credit(nome,importo)
+	for n in nomi:
+		mydb.update_credit(n[0],-(importo*(paga[n[0]]/somma)))
+	return redirect(url_for('index'))
 
 @app.route("/pull")
 def pull():

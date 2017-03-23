@@ -20,7 +20,7 @@
 		<div class="nav-wrapper">
 		  <a href="#" class="brand-logo right">homeDictator</a>
 		  <ul id="nav-mobile" class="left">
-			<li><a href="/classifica">Classifica</a></li>
+			<li><a href="/">Home</a></li>
 			<li><a href="/cancella">Cancella</a></li>
 		  </ul>
 		</div>
@@ -33,10 +33,9 @@
 					<div class="input-field">
 						<select name="nome">
 							<option value="" disabled selected>Nome</option>
-							<option value="Nicola">Nicola</option>
-							<option value="Marco">Marco</option>
-							<option value="Maurizio">Maurizio</option>
-							<option value="Matteo">Matteo</option>
+							{% for nome in nomi %}
+							<option value="{{ nome[0] }}">{{ nome[0] }}</option>
+							{% endfor %}
 						</select>
 					</div>
 					<select name="attivita">
@@ -74,26 +73,64 @@
         <div class="col s12 m6">
           <div class="card">
             <div class="card-content white-text">
-				<table>
-					<thead>
-					  <tr>
-						  <th data-field="nome">Nome</th>
-						  <th data-field="attivita">Attività</th>
-						  <th data-field="date">Data</th>
-						  <!-- <th data-field="isold">Da fare</th> -->
-					  </tr>
-					</thead>
-					{% for entry in lista %}
-					<tbody>
-					  <tr>
-						<td>{{ entry.nome }}</td>
-						<td>{{ entry.attivita }}</td>
-						<td>{{ entry.data }}</td>
-						<!-- <td>{{ entry.is_old() }}</td> -->
-					  </tr>
-					</tbody>
-					{% endfor %}
-				</table>
+				<form method="POST" action="/paga">
+        			<div class="col s6 m6">
+						<div class="input-field">
+							<select name="nome">
+								<option value="" disabled selected>Nome</option>
+								{% for nome in nomi %}
+								<option value="{{ nome[0] }}">{{ nome[0] }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="input-field">
+							<label>Importo €</label>
+							<input type="number" name="importo" step="0.01" min="0">
+						</div>
+						<div class="input-field">
+							<label>Descrizione</label>
+							<input type="text" name="descrizione">
+						</div>
+					</div>
+        			<div class="col s6 m6">
+						<div class="input-field">
+						  <table>
+					        <tbody>
+					          {% for nome in nomi %}
+								<tr>
+								  <td>{{ nome[0] }}</td>
+								  <td><input type="number" name="{{ nome[0] }}" value="1" min="0"></td>
+								</tr>
+					          {% endfor %}
+					        </tbody>
+					      </table>
+				        </div>
+					</div>
+					<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
+				</form>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <div class="card">
+            <div class="card-content white-text">
+			  <table>
+		        <tbody>
+		          {% for nome in nomi %}
+					<tr class="
+					  {% if(nome[1] < 0) %}
+					  {{ 'red darken-4' }}
+					  {% endif %}
+					  {% if(nome[1] > 0) %}
+					  {{ 'green darken-4' }}
+					  {% endif %}
+					  ">
+					  <td>{{ nome[0] }}</td>
+					  <td>{{ "{0:.2f}".format(nome[1]) }} €</td>
+					</tr>
+		          {% endfor %}
+		        </tbody>
+		      </table>
             </div>
           </div>
         </div>
