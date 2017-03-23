@@ -11,3 +11,10 @@ table *{
 }
 table tr{transition-duration: 0.2s}
 table tr:hover{background-color: #111}
+
+.right{
+	float: right;
+}
+td{
+	padding: 0 !important;
+}
