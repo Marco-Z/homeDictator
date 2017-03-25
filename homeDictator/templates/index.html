@@ -6,7 +6,7 @@
 	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
 	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
 	<script src="{{ url_for('static',filename='js/materialize.min.js')}}"></script>
-	<script type="text/javascript" src="{{ url_for('static',filename='js/plotly-latest.min.js')}}"></script>
+	<script type="text/javascript" src="{{ url_for('static',filename='js/Chart.min.js')}}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
 	<script>
@@ -50,22 +50,39 @@
           </div>
 			<div class="card">
 				<div class="card-content white-text">
-				  <div id="myDiv"></div>
+			  	  <canvas id="myChart"></canvas>
 				  <script>
-						var data = [{
-						type: 'bar',
-						y: [
-							{% for entry in p.punteggi %}
-							{{ p.punteggi[entry] }},
-							{% endfor %}
-						],
-						x: [
-							{% for entry in p.punteggi %}
-							'{{ entry }}',
-							{% endfor %}
-						],
-						}];
-						Plotly.newPlot('myDiv', data);
+					var ctx = document.getElementById("myChart");
+					var myChart = new Chart(ctx, {
+						maintainAspectRatio: false,
+					    type: 'bar',
+					    data: {
+					        labels: [   {% for entry in p.punteggi %}
+										'{{ entry }}',
+										{% endfor %}
+									],
+					        fontColor: '#fff',
+					        datasets: [{
+					            data: [ {% for entry in p.punteggi %}
+										{{ p.punteggi[entry] }},
+										{% endfor %}
+									  ],
+					            backgroundColor: '#2196F3'
+					        }]
+					    },
+					    options: {
+					        scales: {
+					            yAxes: [{
+					                ticks: {
+					                    beginAtZero:true
+					                }
+					            }]
+					        },
+					        legend: {
+					            display: false,
+					        }
+					    }
+					});
 				  </script>
 				</div>
 			</div>
