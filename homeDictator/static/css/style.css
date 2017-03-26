@@ -23,6 +23,9 @@ td{
     font-size: large;
     margin: 0 20px;
 }
+#dropdown1{
+	width: auto !important;
+}
 @media screen and (max-width: 480px) {
 	.title{
 		display: none !important;

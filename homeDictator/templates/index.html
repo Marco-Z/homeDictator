@@ -26,8 +26,8 @@
 
 			<!-- Dropdown Structure -->
 			<ul id='dropdown1' class='dropdown-content'>
-				{% for item in todo %}
-				<li><a href="#!">{{ item.attivita }}</a></li>
+				{% for attivita in todo %}
+				<li><a href="#!">{{ attivita }}</a></li>
 				{% endfor %}
 			</ul>
 			{% endif %}
