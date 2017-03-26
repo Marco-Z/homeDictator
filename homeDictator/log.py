@@ -25,5 +25,6 @@ class log(object):
 			activity = log(row)
 			if not activity.is_old():
 				dafare.remove(activity.attivita)
+		dafare.remove('disordine')
 		return(dafare)
 
