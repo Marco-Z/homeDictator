@@ -18,11 +18,25 @@
 <body>
 	<nav class="grey darken-3">
 		<div class="nav-wrapper">
-		  <a href="#" class="brand-logo right">homeDictator</a>
+		  <div class="brand-logo right">
+		    <a href="#" class="right title">homeDictator</a>
+			{% if todo|length > 0%}
+			<!-- Dropdown Trigger -->
+			<a class='dropdown-button btn red dafare' href='#' data-activates='dropdown1'>{{ todo|length }} da fare</a>
+
+			<!-- Dropdown Structure -->
+			<ul id='dropdown1' class='dropdown-content'>
+				{% for item in todo %}
+				<li><a href="#!">{{ item.attivita }}</a></li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		  </div>
 		  <ul id="nav-mobile" class="left">
 			<li><a href="/">Home</a></li>
 			<li><a href="/cancella">Cancella</a></li>
 		  </ul>
+		  
 		</div>
 	</nav>
 	<div class="row">

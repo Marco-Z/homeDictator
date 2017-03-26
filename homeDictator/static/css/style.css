@@ -18,3 +18,16 @@ table tr:hover{background-color: #111}
 td{
 	padding: 0 !important;
 }
+.dafare{
+	padding: 0 5px !important;
+    font-size: large;
+    margin: 0 20px;
+}
+@media screen and (max-width: 480px) {
+	.title{
+		display: none !important;
+	}
+	.dafare{
+	    font-size: initial;
+	}
+}
