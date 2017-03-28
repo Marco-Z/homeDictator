@@ -1,18 +1,22 @@
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response, session, escape
 from homeDictator.db import db_manager
 from homeDictator.log import log
 from homeDictator.activity import activity
 from homeDictator.standings import standings
 from datetime import date
 from subprocess import Popen
+import os
 
 app = Flask(__name__, template_folder="../homeDictator/templates", static_folder="../homeDictator/static")
 
+app.secret_key=os.urandom(24)
 mydb = db_manager()
 
 @app.route("/", methods=['GET','POST'])
 def index():
 	if request.method == 'POST':
+		if 'username' in session:
+			print( 'Logged in as %s' % escape(session['username']))
 		n = request.form['nome']
 		a = request.form['attivita']
 		mydb.insert(n,a,date.today())
@@ -66,3 +70,17 @@ def pull():
 	Popen(['./pull.bat'], shell=True,
              stdin=None, stdout=None, stderr=None, close_fds=True)
 	exit(0)
+
+@app.route('/login', methods = ['POST'])
+def setcookie():
+	if request.method == 'POST':
+		user = request.form['username']
+		pssw=request.form['password']
+
+		# redirect_to_index = redirect(url_for('index'))
+		# response = make_response(redirect_to_index )  
+		# response.set_cookie('cookie_name',value=user)
+		# return response
+		session['username'] = user
+	return redirect(url_for('index'))
+   
