@@ -6,28 +6,42 @@
 	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
 	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
 	<script src="{{ url_for('static',filename='js/materialize.js')}}"></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<script type="text/javascript" src="{{ url_for('static',filename='js/plotly-latest.min.js')}}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
 	<script>
 		 $(document).ready(function() {
 		$('select').material_select();
-		$(".button-collapse").sideNav();
+		$('.button-collapse').sideNav();
 	  });
 	</script>
 </head>
 <body>
 	<nav class="grey darken-3">
 		<div class="nav-wrapper">
-		  <a href="#!" class="brand-logo">homeDictator</a>
-		  <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-		  <ul class="right hide-on-med-and-dow">
-			<li><a href="/">Homebar</a></li>
-			<li><a href="/cancella">Cancellabar</a></li>
+		  <a href="#!" class="brand-logo right">homeDictator</a>
+		  <a href="#" data-activates="mobile-demo" class="button-collapse">
+		  	<i class="material-icons">menu</i>
+		  </a>
+		  <ul  id="nav-mobile" class="left hide-on-med-and-down">
+			<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
+			<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
 		  </ul>
-		   <ul id="mobile-demo" class="side-nav ">
-			<li><a href="/">Homeslide</a></li>
-			<li><a href="/cancella">Cancellaslide</a></li>
+		   <ul class="side-nav" id="mobile-demo">
+		   	<li><div class="userView">
+		   		<div class="background">
+		   			<img src="{{ url_for('static',filename='img/low-poly.jpg')}}">
+		   		</div>
+		   		<a href="#!user"><img class='circle' src="{{ url_for('static',filename='img/avatar.jpg')}}"></a>
+		   		<a href="#!name">Gabe Newell</span></a>
+		   		<a class="waves-effect waves-light btn"><i class="material-icons left">input</i> Logout </a>
+		   		
+		   	</div></li>
+
+			<li><a href="/"><i class="material-icons left">home</i>Homeslide</a></li>
+			<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
+
 		  </ul>
 		</div>
 	</nav>
