@@ -1,20 +1,40 @@
 body{
-	background-image: url("../img/dark_back.png")
-	
+	background-image: url("../img/dark_back.png");
+	background-attachment: fixed;
+	background-repeat: no-repeat;
 }
 .card {
-	background-color: rgba(1,2,3,0)
+	background-color: rgba(1,2,3,0);
 }
 table *{
 	color: white; 
-	background-color: rgba(1,2,3,0)
+	background-color: rgba(1,2,3,0);
 }
-table tr{transition-duration: 0.2s}
-table tr:hover{background-color: #111}
-
+table tr{
+	transition-duration: 0.2s;
+}
+table tr:hover{
+	background-color: #111;
+}
 .right{
 	float: right;
 }
 td{
 	padding: 0 !important;
+}
+.dafare{
+	padding: 0 5px !important;
+    font-size: large;
+    margin: 0 20px;
+}
+#dropdown1{
+	width: auto !important;
+}
+@media screen and (max-width: 480px) {
+	.title{
+		display: none !important;
+	}
+	.dafare{
+	    font-size: initial;
+	}
 }

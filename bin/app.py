@@ -28,7 +28,8 @@ def index():
 		a = at[0]
 		punteggi.update(activity(a, mydb.get_times_for_activity(a)))
 	nomi = mydb.retrieve_debts()
-	return render_template('index.html', res=res, attivita=attivita,p=punteggi,nomi=nomi)
+	todo = log.to_do()
+	return render_template('index.html', res=res, attivita=attivita,p=punteggi,nomi=nomi,todo=todo)
 
 @app.route("/punti/<attivita>")
 def punti(attivita):

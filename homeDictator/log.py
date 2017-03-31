@@ -16,10 +16,18 @@ class log(object):
 		return(date.today()-self.data).days >= int(self.config['intervallo'][self.attivita])
 
 	def to_do():
+		config = configparser.ConfigParser()
+		config.read('homeDictator/config.ini')
+		lista = config.options('punti')
+		dafare = set(lista)
 		res = db_manager().retrieve_last()
-		lista = []
 		for row in res:
 			activity = log(row)
-			if activity.is_old():
-				lista.append(activity)
-		return lista
+			if not activity.is_old():
+				dafare.remove(activity.attivita)
+		try:
+			dafare.remove('disordine')
+		except:
+			pass
+		return(dafare)
+
