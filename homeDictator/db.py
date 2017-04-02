@@ -23,9 +23,12 @@ class db_manager(object):
 		create_users = """
 			CREATE TABLE IF NOT EXISTS users ( 
 			id INTEGER PRIMARY KEY, 
-			nome TEXT, 
-			credito REAL DEFAULT 0);
+			nome TEXT NOT NULL UNIQUE, 
+			credito REAL DEFAULT 0, 
+			password TEXT DEFAULT 'password', 
+			is_admin INTEGER DEFAULT 0 );
 			"""
+
 		self.cursor.execute(create_users)
 		self.connection.commit()
 		if len(self.cursor.execute("SELECT * FROM users;").fetchall()) == 0:
@@ -120,4 +123,16 @@ class db_manager(object):
 
 	def string_to_date(date):
 		return datetime.strptime(date, '%Y-%m-%d').date()
+
+	def get_user(a_id):
+		select_command = """
+			SELECT id, nome, password, is_admin
+			FROM users
+			WHERE nome = ?
+			"""
+		try:
+			return list(self.cursor.execute(select_command,[a_id]))[0]
+		
+		except:
+			return None
 

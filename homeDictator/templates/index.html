@@ -8,7 +8,6 @@
 	<script type="text/javascript" src="{{ url_for('static',filename='js/Chart.min.js')}}"></script>
 	<script src="{{ url_for('static',filename='js/materialize.js')}}"></script>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<script type="text/javascript" src="{{ url_for('static',filename='js/plotly-latest.min.js')}}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
@@ -22,14 +21,9 @@
 <body>
 	<nav class="grey darken-3">
 		<div class="nav-wrapper">
-		  <a href="#!" class="brand-logo right">homeDictator</a>
-		  <a href="#" data-activates="mobile-demo" class="button-collapse">
-		  	<i class="material-icons">menu</i>
-		  </a>
-		  <ul  id="nav-mobile" class="left hide-on-med-and-down">
-			<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
-			<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
-		  <div class="brand-logo right">
+		  
+		  <div class="right">
+		  	<a href="#!" class="brand-logo right">homeDictator</a>
 			{% if todo|length > 0%}
 			<!-- Dropdown Trigger -->
 			<a class='dropdown-button btn red dafare' href='#' data-activates='dropdown1'>{{ todo|length }} da fare</a>
@@ -42,6 +36,13 @@
 			</ul>
 			{% endif %}
 		  </div>
+		  <a href="#" data-activates="mobile-demo" class="button-collapse">
+		  	<i class="material-icons">menu</i>
+		  </a>
+		  <ul  id="nav-mobile" class="left hide-on-med-and-down">
+			<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
+			<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
+		  
 		  </ul>
 		   <ul class="side-nav" id="mobile-demo">
 		   	<li><div class="userView">

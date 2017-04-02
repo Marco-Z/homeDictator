@@ -6,12 +6,24 @@ from homeDictator.standings import standings
 from datetime import date
 from subprocess import Popen
 import os
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_openid import OpenID
 
 app = Flask(__name__, template_folder="../homeDictator/templates", static_folder="../homeDictator/static")
+
+#login
+login_m = LoginManager()
+login_m.init_app(app)
+#
 
 app.secret_key=os.urandom(24)
 mydb = db_manager()
 
+#-----
+@login_m.user_loader
+def load_user(id):
+	return User.query.get(int(id))
+#----
 @app.route("/", methods=['GET','POST'])
 def index():
 	if request.method == 'POST':
