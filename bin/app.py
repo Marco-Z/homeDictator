@@ -3,6 +3,7 @@ from homeDictator.db import db_manager
 from homeDictator.log import log
 from homeDictator.activity import activity
 from homeDictator.standings import standings
+from homeDictator.spesa import spesa
 from datetime import date
 from subprocess import Popen
 
@@ -67,3 +68,15 @@ def pull():
 	Popen(['./pull.bat'], shell=True,
              stdin=None, stdout=None, stderr=None, close_fds=True)
 	exit(0)
+
+@app.route("/spesa", methods=['GET','POST'])
+def la_spesa():
+	s = spesa()
+	if request.method == 'POST':
+		testoh = request.form['spesa']
+		s.scrivi(testoh)
+		return redirect(url_for('index'))
+	else:
+		testoh = s.leggi()
+		return render_template('spesa.html',testoh=testoh)
+

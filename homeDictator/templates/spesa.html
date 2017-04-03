@@ -30,35 +30,10 @@
 		<div class="col s12">
           <div class="card">
             <div class="card-content white-text">
-			  <form action="/cancella" method="POST">
-			  	<button type="submit" class="right waves-effect waves-light btn red">Cancella</button>
-			  	<table>
-				  {% for entry in lista %}
-				  	<tr>
-				  	  <td>
-						<p>
-					      <input name="attivita" type="radio" id="{{ entry.a_id }}" value="{{ entry.a_id }}" />
-					      <label for="{{ entry.a_id }}"></label>
-					    </p>
-					  </td>
-					  <td>
-					  	<p>
-					  		{{ entry.nome }}
-					  	</p>
-					  </td>
-					  <td>
-					  	<p>
-					  		{{ entry.data }}
-					  	</p>
-					  </td>
-					  <td>
-					  	<p>
-					  		{{ entry.attivita }}
-					  	</p>
-					  </td>
-				    </tr>
-				  {% endfor %}
-			  	</table>
+			  <form action="/spesa" method="POST">
+				<textarea id="textarea1" class="materialize-textarea" name="spesa">{{ testoh }}</textarea>
+				<label for="textarea1">Lista della spesa</label>
+          		<button type="submit" class="right waves-effect waves-light btn">Salva</button>
 			  </form>
             </div>
           </div>
