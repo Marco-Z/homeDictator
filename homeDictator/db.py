@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime, date
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class db_manager(object):
 
@@ -22,7 +23,7 @@ class db_manager(object):
 		# initialize users table
 		create_users = """
 			CREATE TABLE IF NOT EXISTS users ( 
-			id INTEGER PRIMARY KEY, 
+			id INTEGER PRIMARY KEY AUTOINCREMENT, 
 			nome TEXT NOT NULL UNIQUE, 
 			credito REAL DEFAULT 0, 
 			password TEXT DEFAULT 'password', 
@@ -124,15 +125,47 @@ class db_manager(object):
 	def string_to_date(date):
 		return datetime.strptime(date, '%Y-%m-%d').date()
 
-	def get_user(a_id):
+	def get_user_by_id(self,a_id):
 		select_command = """
-			SELECT id, nome, password, is_admin
+			SELECT id,nome,password,is_admin
 			FROM users
-			WHERE nome = ?
+			WHERE id = ?
 			"""
 		try:
-			return list(self.cursor.execute(select_command,[a_id]))[0]
+			return self.cursor.execute(select_command,[a_id]).fetchone()
 		
 		except:
 			return None
 
+	def update_password(self,username,pw):
+	
+		update_command = """
+		UPDATE users
+		SET password = ?
+		WHERE nome = ? ;
+		"""
+		self.cursor.execute(update_command,[generate_password_hash(pw), username])
+		self.connection.commit()
+		return True
+	
+		return False
+
+	def insert_user(self, nome, password, is_admin):
+			insert_command = """
+				INSERT INTO users (nome, password,is_admin) 
+				VALUES (?,?,?);
+				"""
+			self.cursor.execute(insert_command,[nome, password, is_admin])
+			self.connection.commit()
+
+	def get_user_from_name_and_password(self, nome,password):
+		select_command = """
+			SELECT id, nome, password , is_admin 
+			FROM users
+			WHERE nome = ?
+			GROUP BY nome
+			"""
+		res=self.cursor.execute(select_command, [nome]).fetchone()
+		if check_password_hash(res[2],password):
+			return res
+		return None

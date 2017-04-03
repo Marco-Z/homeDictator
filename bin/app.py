@@ -3,6 +3,7 @@ from homeDictator.db import db_manager
 from homeDictator.log import log
 from homeDictator.activity import activity
 from homeDictator.standings import standings
+from homeDictator.user import User
 from datetime import date
 from subprocess import Popen
 import os
@@ -10,19 +11,23 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from flask_openid import OpenID
 
 app = Flask(__name__, template_folder="../homeDictator/templates", static_folder="../homeDictator/static")
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 #login
 login_m = LoginManager()
 login_m.init_app(app)
 #
 
-app.secret_key=os.urandom(24)
 mydb = db_manager()
 
 #-----
 @login_m.user_loader
-def load_user(id):
-	return User.query.get(int(id))
+def load_user(a_id):
+	u=db_manager().get_user_by_id(a_id)
+	if u:
+		user=User(a_id=u[0],nome=u[1],password=u[2],is_admin=u[3])
+		return user
+	return None
 #----
 @app.route("/", methods=['GET','POST'])
 def index():
@@ -85,15 +90,24 @@ def pull():
 	exit(0)
 
 @app.route('/login', methods = ['POST'])
-def setcookie():
+def login():
 	if request.method == 'POST':
 		user = request.form['username']
 		pssw=request.form['password']
+		#print(mydb.update_password(user,pssw))
+		#return a user ,only if the username and password are correct 
+		usr= User.get_usr_by_username_and_password(username=user,password=pssw)
+		print ("login in corso")
+		if usr:
+			print("loggato")
+			login_user(usr)
 
-		# redirect_to_index = redirect(url_for('index'))
-		# response = make_response(redirect_to_index )  
-		# response.set_cookie('cookie_name',value=user)
-		# return response
-		session['username'] = user
+
 	return redirect(url_for('index'))
-   
+
+
+@login_required
+@app.route('/secret', methods = ['GET'])
+def secret():
+	print(current_user.get_id())
+	return 'muschio'
