@@ -4,13 +4,13 @@ class spesa(object):
 		pass
 
 	def scrivi(self, testoh):
-		myfile = open('/homeDictator/static/spesa.txt', 'w')
+		myfile = open('spesa.txt', 'w')
 		myfile.write(testoh)
 		myfile.flush()
 		myfile.close()
 
 	def leggi(self):
-		myfile = open('/homeDictator/static/spesa.txt', 'r')
+		myfile = open('spesa.txt', 'r')
 		testoh = myfile.read()
 		myfile.close()
 		return testoh
