@@ -44,6 +44,18 @@ class db_manager(object):
 			data TEXT, 
 			descrizione TEXT);
 			"""
+		self.cursor.execute(create_command)
+
+		# initialize movimenti table
+		create_command = """
+			CREATE TABLE IF NOT EXISTS movimenti ( 
+			id INTEGER PRIMARY KEY, 
+			nome TEXT, 
+			importo REAL, 
+			descrizione TEXT, 
+			data TEXT);
+			"""
+		self.cursor.execute(create_command)
 
 	def reset(self):
 		delete_command = """
@@ -121,3 +133,17 @@ class db_manager(object):
 	def string_to_date(date):
 		return datetime.strptime(date, '%Y-%m-%d').date()
 
+	def logga_movimento(self, nome, importo, descrizione):
+		insert_command = """
+			INSERT INTO movimenti (nome, importo, descrizione, data) 
+			VALUES (?,?,?,?);
+			"""
+		self.cursor.execute(insert_command,[nome, importo, descrizione, date.today()])
+		self.connection.commit()
+
+	def retrieve_movimenti(self):
+		select_command = """
+			SELECT * FROM movimenti ORDER BY data DESC;
+			"""
+		res = self.cursor.execute(select_command).fetchall()
+		return res
