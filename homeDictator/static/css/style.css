@@ -38,3 +38,12 @@ td{
 	    font-size: initial;
 	}
 }
+
+.home{
+	height: 64px;
+}
+.home img{
+	width: 30px;
+    margin-top: 16px;
+    filter: brightness(100);
+}

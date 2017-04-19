@@ -14,3 +14,4 @@ class spesa(object):
 		testoh = myfile.read()
 		myfile.close()
 		return testoh
+		
