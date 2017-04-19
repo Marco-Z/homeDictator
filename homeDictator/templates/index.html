@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="{{ url_for('static',filename='js/Chart.min.js')}}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
 	<script>
 		 $(document).ready(function() {
 		$('select').material_select();
@@ -26,8 +27,8 @@
 
 			<!-- Dropdown Structure -->
 			<ul id='dropdown1' class='dropdown-content'>
-				{% for item in todo %}
-				<li><a href="#!">{{ item.attivita }}</a></li>
+				{% for attivita in todo %}
+				<li><a href="#!">{{ attivita }}</a></li>
 				{% endfor %}
 			</ul>
 			{% endif %}
@@ -35,6 +36,7 @@
 		  <ul id="nav-mobile" class="left">
 			<li><a href="/">Home</a></li>
 			<li><a href="/cancella">Cancella</a></li>
+			<li><a href="/spesa">Spesa</a></li>
 		  </ul>
 		  
 		</div>
