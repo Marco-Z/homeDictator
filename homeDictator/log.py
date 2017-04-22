@@ -13,7 +13,21 @@ class log(object):
 		self.config.read('homeDictator/config.ini')
 
 	def is_old(self):
-		return(date.today()-self.data).days >= int(self.config['intervallo'][self.attivita])
+		print(self.attivita)
+		res = (date.today()-self.data).days >= int(self.config['intervallo'][self.attivita])
+		if self.attivita == 'carta' and date.today().weekday() is not 3: #thursday
+			res = False
+			print('non è da fare')
+		if self.attivita == 'umido' and date.today().weekday() is not 0 and date.today().weekday() is not 3: #monday or thursday
+			res = False
+			print('non è da fare')
+		if self.attivita == 'plastica' and date.today().weekday() is not 4: #friday
+			res = False
+			print('non è da fare')
+		if self.attivita == 'vetro' and date.today().weekday() is not 0: #monday
+			res = False
+			print('non è da fare')
+		return res
 
 	def to_do():
 		config = configparser.ConfigParser()
