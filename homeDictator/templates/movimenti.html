@@ -4,7 +4,7 @@
 	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
     <link href="{{ url_for('static',filename='css/materialize.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="{{ url_for('static',filename='css/material-icon.css')}}" rel="stylesheet">
 	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
 	<script src="{{ url_for('static',filename='js/materialize.min.js')}}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,18 +12,36 @@
 	<script>
 		 $(document).ready(function() {
 		$('select').material_select();
+		$('.button-collapse').sideNav();
 	  });
 	</script>
 </head>
 <body>
 	<nav class="grey darken-3">
-		<div class="nav-wrapper">
-		  <a href="#" class="brand-logo right">homeDictator</a>
-		  <ul id="nav-mobile" class="left">
-			<li><a href="/" class="home"><img src="{{ url_for('static',filename='img/favicon.ico')}}" title="Home"></a></li>			<li><a href="/cancella"><i class="material-icons" title="Lista attività">list</i></a></li>
-			<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
-			<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">assignment</i></a></li>
-		  </ul>
+	<div class="nav-wrapper">
+			<a href="/" class="brand-logo center"><i class="material-icons left" id="home-dict">home</i>Dictator</a>
+			<a href="#" data-activates="mobile-demo" class="button-collapse">
+				<i class="material-icons">menu</i>
+			</a>
+			<ul id="nav-mobile" class="left hide-on-med-and-down">
+				<li><a href="/cancella"><i class="material-icons left">delete_sweep</i></a></li>
+				<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
+				<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">attach_money</i></a></li>
+			</ul>			
+			<ul class="side-nav" id="mobile-demo">
+				<li><div class="userView">
+					<div class="background">
+						<img src="{{ url_for('static',filename='img/low-poly.jpg')}}">
+					</div>
+					<a href="#!user"><img class='circle' src="{{ url_for('static',filename='img/avatar.jpg')}}"></a>
+					<a href="#!name">Gabe Newell</span></a>
+				</div></li>
+				<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
+				<li><a href="/login"><i class="material-icons left">perm_identity</i>Login</a></li>
+				<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
+				<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
+				<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">assignment</i></a></li>				
+			</ul>
 		</div>
 	</nav>
 	<div class="row">

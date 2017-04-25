@@ -196,3 +196,17 @@ class db_manager(object):
 			if check_password_hash(res[2],password):
 				return res
 		return None
+
+	def change_avatar(self, image, nome):
+		blob=None
+		try:
+			blob=image.read()
+			sql="update users set avatar = ? where nome= ? "
+			res=res=self.cursor.execute(sql, [sqlite3.Binary(blob),nome])
+			self.connection.commit()
+			return True
+		except Exception as e:
+			print("error while %s was changing his avatar" %(nome) )
+		else:
+			return False
+

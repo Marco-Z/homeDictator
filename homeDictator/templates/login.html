@@ -32,19 +32,17 @@
 
 	<nav class="grey darken-3">
 		<div class="nav-wrapper">
-			<a href="#!" class="brand-logo center">homeDictator</a>
+			<a href="/" class="brand-logo center"><i class="material-icons left" id="home-dict">home</i>Dictator</a>
 			<a href="#" data-activates="mobile-demo" class="button-collapse">
 				<i class="material-icons">menu</i>
 			</a>
 			<ul id="nav-mobile" class="left hide-on-med-and-down">
-				<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
-				<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
-				{% if todo|length > 0%}
-				<!-- Dropdown Trigger -->
-				<li><a class="dropdown-button red" href="#!" data-activates="dropdown1">{{ todo|length }} da fare<i class="material-icons right">arrow_drop_down</i></a></li>					
-				{% endif %}
-
-				
+				<li><a href="/cancella"><i class="material-icons left">delete_sweep</i></a></li>
+				<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
+				<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">attach_money</i></a></li>
+			</ul>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+			<li><a href="/login"><i class="material-icons left pulse">perm_identity</i>Login</a></li>
 			</ul>
 			<ul class="side-nav" id="mobile-demo">
 				<li><div class="userView">
@@ -55,12 +53,10 @@
 					<a href="#!name">Gabe Newell</span></a>
 				</div></li>
 				<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
+				<li><a href="/login"><i class="material-icons left">perm_identity</i>Login</a></li>
 				<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
-				{% if todo|length > 0%}
-				<!-- Dropdown Trigger -->
-				<li><a class="dropdown-button red" href="#!" data-activates="dropdown1">{{ todo|length }} da fare<i class="material-icons right">arrow_drop_down</i></a></li>					
-				{% endif %}
-				
+				<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
+				<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">assignment</i></a></li>				
 			</ul>
 		</div>
 	</nav>
