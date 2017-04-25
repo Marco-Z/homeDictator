@@ -42,3 +42,12 @@ td{
 nav .input-field input {
 color: black !important
 }
+
+.home{
+	height: 64px;
+}
+.home img{
+	width: 30px;
+    margin-top: 16px;
+    filter: brightness(100);
+}

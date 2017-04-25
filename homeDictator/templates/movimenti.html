@@ -20,8 +20,7 @@
 		<div class="nav-wrapper">
 		  <a href="#" class="brand-logo right">homeDictator</a>
 		  <ul id="nav-mobile" class="left">
-			<li><a href="/" class="home"><img src="{{ url_for('static',filename='img/favicon.ico')}}" title="Home"></a></li>
-			<li><a href="/cancella"><i class="material-icons" title="Lista attività">list</i></a></li>
+			<li><a href="/" class="home"><img src="{{ url_for('static',filename='img/favicon.ico')}}" title="Home"></a></li>			<li><a href="/cancella"><i class="material-icons" title="Lista attività">list</i></a></li>
 			<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
 			<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">assignment</i></a></li>
 		  </ul>
@@ -31,20 +30,31 @@
 		<div class="col s12">
           <div class="card">
             <div class="card-content white-text">
-			  <form action="/cancella" method="POST">
-			  	<button type="submit" class="right waves-effect waves-light btn red">Cancella</button>
 			  	<table>
+			  		<tr>
+			  			<td>
+			  				<h4>Creditore</h4>
+			  			</td>
+			  			<td>
+			  				<h4>Importo</h4>
+			  			</td>
+			  			<td>
+			  				<h4>Data</h4>
+			  			</td>
+			  			<td>
+			  				<h4>Descrizione</h4>
+			  			</td>
+			  		</tr>
 				  {% for entry in lista %}
 				  	<tr>
-				  	  <td>
-						<p>
-					      <input name="attivita" type="radio" id="{{ entry.a_id }}" value="{{ entry.a_id }}" />
-					      <label for="{{ entry.a_id }}"></label>
-					    </p>
-					  </td>
 					  <td>
 					  	<p>
 					  		{{ entry.nome }}
+					  	</p>
+					  </td>
+					  <td>
+					  	<p>
+					  		{{ "{0:.2f}".format(entry.importo) }} €
 					  	</p>
 					  </td>
 					  <td>
@@ -54,13 +64,12 @@
 					  </td>
 					  <td>
 					  	<p>
-					  		{{ entry.attivita }}
+					  		{{ entry.descrizione }}
 					  	</p>
 					  </td>
 				    </tr>
 				  {% endfor %}
 			  	</table>
-			  </form>
             </div>
           </div>
 		</div>

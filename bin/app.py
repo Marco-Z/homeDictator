@@ -3,6 +3,8 @@ from homeDictator.db import db_manager
 from homeDictator.log import log
 from homeDictator.activity import activity
 from homeDictator.standings import standings
+from homeDictator.spesa import spesa
+from homeDictator.movimento import movimento
 from homeDictator.user import User
 from datetime import date
 from subprocess import Popen
@@ -82,6 +84,7 @@ def paga():
 	mydb.update_credit(nome,importo)
 	for n in nomi:
 		mydb.update_credit(n[0],-(importo*(paga[n[0]]/somma)))
+	mydb.logga_movimento(nome,importo,desc)
 	return redirect(url_for('index'))
 
 @app.route("/pull")
@@ -112,3 +115,22 @@ def login():
 def secret():
 	print('utente',current_user.get_id())
 	return 'muschio'
+
+@app.route("/spesa", methods=['GET','POST'])
+def la_spesa():
+	s = spesa()
+	if request.method == 'POST':
+		testoh = request.form['spesa']
+		s.scrivi(testoh)
+		return redirect(url_for('index'))
+	else:
+		testoh = s.leggi()
+		return render_template('spesa.html',testoh=testoh)
+
+@app.route("/lista_spese")
+def lista_spese():
+	res = mydb.retrieve_movimenti()
+	lista_movimenti = []
+	for mov in res:
+		lista_movimenti.append(movimento(mov))
+	return render_template('movimenti.html',lista=lista_movimenti)
