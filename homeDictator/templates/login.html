@@ -1,0 +1,136 @@
+<!doctype html>
+<head>
+	<title>homeDictator</title>
+	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
+    <link href="{{ url_for('static',filename='css/materialize.min.css')}}" rel="stylesheet" type="text/css">
+	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
+	<link href="{{ url_for('static',filename='css/material-icon.css')}}" rel="stylesheet">
+	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
+	<script type="text/javascript" src="{{ url_for('static',filename='js/Chart.min.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/materialize.js')}}"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+	<script>
+		 $(document).ready(function() {
+		$('select').material_select();
+		$('.button-collapse').sideNav();
+		$('.dropdown-button').dropdown();
+	  });
+	</script>
+</head>
+<body>
+	{% if todo|length > 0%}
+	<ul id="dropdown1" class="dropdown-content">
+		{% for attivita in todo %}
+		<li><a href="#!">{{ attivita }}</a></li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+
+
+
+	<nav class="grey darken-3">
+		<div class="nav-wrapper">
+			<a href="#!" class="brand-logo center">homeDictator</a>
+			<a href="#" data-activates="mobile-demo" class="button-collapse">
+				<i class="material-icons">menu</i>
+			</a>
+			<ul id="nav-mobile" class="left hide-on-med-and-down">
+				<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
+				<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
+				{% if todo|length > 0%}
+				<!-- Dropdown Trigger -->
+				<li><a class="dropdown-button red" href="#!" data-activates="dropdown1">{{ todo|length }} da fare<i class="material-icons right">arrow_drop_down</i></a></li>					
+				{% endif %}
+
+				
+			</ul>
+			<ul class="side-nav" id="mobile-demo">
+				<li><div class="userView">
+					<div class="background">
+						<img src="{{ url_for('static',filename='img/low-poly.jpg')}}">
+					</div>
+					<a href="#!user"><img class='circle' src="{{ url_for('static',filename='img/avatar.jpg')}}"></a>
+					<a href="#!name">Gabe Newell</span></a>
+				</div></li>
+				<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
+				<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
+				{% if todo|length > 0%}
+				<!-- Dropdown Trigger -->
+				<li><a class="dropdown-button red" href="#!" data-activates="dropdown1">{{ todo|length }} da fare<i class="material-icons right">arrow_drop_down</i></a></li>					
+				{% endif %}
+				
+			</ul>
+		</div>
+	</nav>
+	<div class="row hide-on-med-and-up">
+		<div class="col s12">
+			<div class="card">
+				<div class="card-content white-text">
+				<span class="card-title">Login</span>
+				{% if error %}
+				<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
+				{% endif %}
+					<form class="login-form" method="post" action="/login">
+						<div class='row margin'>
+							<div class='input-field col s12'>
+								<i class="material-icons prefix">account_circle</i>
+								<input  type='text' name='username' id='email' class="validate">
+								<label for='email'>nome utente</label>
+							</div>
+						</div>
+
+						<div class='row'>
+							<div class='input-field col s12'>
+								<i class="material-icons prefix">lock_outline</i>
+								<input class='validate' type='password' name='password' id='password' class="validate">
+								<label for='password'>password</label>
+							</div>
+						</div>
+						<center>
+							<div class='row'>
+								<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
+							</div>
+						</center>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row hide-on-small-and-down">
+		<div class="col s6 offset-s3">
+			<div class="card">
+				<div class="card-content white-text">
+					<span class="card-title">Login</span>
+					{% if error %}
+					<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
+					{% endif %}
+					<form class="login-form" method="post" action="/login">
+						<div class='row margin'>
+							<div class='input-field col s12'>
+								<i class="material-icons prefix">account_circle</i>
+								<input  type='text' name='username' id='email' class="validate">
+								<label for='email'>nome utente</label>
+							</div>
+						</div>
+
+						<div class='row'>
+							<div class='input-field col s12'>
+								<i class="material-icons prefix">lock_outline</i>
+								<input class='validate' type='password' name='password' id='password' class="validate">
+								<label for='password'>password</label>
+							</div>
+						</div>
+						<center>
+							<div class='row'>
+								<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
+							</div>
+						</center>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>

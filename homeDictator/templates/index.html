@@ -4,22 +4,32 @@
 	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
     <link href="{{ url_for('static',filename='css/materialize.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="{{ url_for('static',filename='css/material-icon.css')}}" rel="stylesheet">
 	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
 	<script type="text/javascript" src="{{ url_for('static',filename='js/Chart.min.js')}}"></script>
 	<script src="{{ url_for('static',filename='js/materialize.js')}}"></script>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
 	<script>
 		 $(document).ready(function() {
 		$('select').material_select();
 		$('.button-collapse').sideNav();
+		$('.dropdown-button').dropdown();
 	  });
 	</script>
 </head>
 <body>
+	{% if todo|length > 0%}
+	<ul id="dropdown1" class="dropdown-content">
+		{% for attivita in todo %}
+		<li><a href="#!">{{ attivita }}</a></li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+
+
+
 	<nav class="grey darken-3">
 		<div class="nav-wrapper">
 			<a href="#!" class="brand-logo center">homeDictator</a>
@@ -29,23 +39,15 @@
 			<ul id="nav-mobile" class="left hide-on-med-and-down">
 				<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
 				<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
-				<li>
-					{% if todo|length > 0%}
-					<!-- Dropdown Trigger -->
-					<a class='dropdown-button btn red dafare' href='#' data-activates='dropdown1'>
-					{{ todo|length }} da fare</a>
+				{% if todo|length > 0%}
+				<!-- Dropdown Trigger -->
+				<li><a class="dropdown-button red" href="#!" data-activates="dropdown1">{{ todo|length }} da fare<i class="material-icons right">arrow_drop_down</i></a></li>					
+				{% endif %}
 
-					<!-- Dropdown Structure -->
-					
-					<ul id='dropdown1' class='dropdown-content'>
-						{% for attivita in todo %}
-						<li><a href="#!">{{ attivita }}</a></li>
-						{% endfor %}
-					</ul>
-					
-					{% endif %}
-				</li>
 				
+			</ul>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+			<li><a href="/login"><i class="material-icons left pulse">perm_identity</i>Login</a></li>
 			</ul>
 			<ul class="side-nav" id="mobile-demo">
 				<li><div class="userView">
@@ -55,46 +57,14 @@
 					<a href="#!user"><img class='circle' src="{{ url_for('static',filename='img/avatar.jpg')}}"></a>
 					<a href="#!name">Gabe Newell</span></a>
 				</div></li>
-				<li><a href="/"><i class="material-icons left">home</i>Homeslide</a></li>
+				<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
+				<li><a href="/login"><i class="material-icons left">perm_identity</i>Login</a></li>
 				<li><a href="/cancella"><i class="material-icons left">mode_edit</i>Cancella</a></li>
-				<li>
-					<div class="container">
-						<div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
-
-							<form class="col s12" method="post" action="/login">
-								<div class='row'>
-									<div class='col s12'>
-									</div>
-								</div>
-
-								<div class='row'>
-									<div class='input-field col s12'>
-										<input  type='text' name='username' id='email' />
-										<label for='email'>Username</label>
-									</div>
-								</div>
-
-								<div class='row'>
-									<div class='input-field col s12'>
-										<input class='validate' type='password' name='password' id='password' />
-										<label for='password'>Enter your password</label>
-									</div>
-									<label style='float: right;'>
-										<a class='pink-text' href='#!'><b>Forgot Password?</b></a>
-									</label>
-								</div>
-
-								<br />
-								<center>
-									<div class='row'>
-										<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
-									</div>
-								</center>
-							</form>
-						</div>
-					</div>
-
-				</li>
+				{% if todo|length > 0%}
+				<!-- Dropdown Trigger -->
+				<li><a class="dropdown-button red" href="#!" data-activates="dropdown1">{{ todo|length }} da fare<i class="material-icons right">arrow_drop_down</i></a></li>					
+				{% endif %}
+				
 			</ul>
 		</div>
 	</nav>

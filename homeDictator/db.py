@@ -192,6 +192,7 @@ class db_manager(object):
 			WHERE nome = ?
 			"""
 		res=self.cursor.execute(select_command, [nome]).fetchone()
-		if check_password_hash(res[2],password):
-			return res
+		if res:
+			if check_password_hash(res[2],password):
+				return res
 		return None
