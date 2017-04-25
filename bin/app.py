@@ -24,6 +24,7 @@ mydb = db_manager()
 @login_m.user_loader
 def load_user(a_id):
 	u=db_manager().get_user_by_id(a_id)
+	print('user loader',u!=None)
 	if u:
 		user=User(a_id=u[0],nome=u[1],password=u[2],is_admin=u[3])
 		return user
@@ -99,7 +100,7 @@ def login():
 		usr= User.get_usr_by_username_and_password(username=user,password=pssw)
 		print ("login in corso")
 		if usr:
-			print("loggato")
+			print("loggato :" ,usr.username)
 			login_user(usr)
 
 
@@ -109,5 +110,5 @@ def login():
 @login_required
 @app.route('/secret', methods = ['GET'])
 def secret():
-	print(current_user.get_id())
+	print('utente',current_user.get_id())
 	return 'muschio'

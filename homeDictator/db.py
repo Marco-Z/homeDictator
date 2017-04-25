@@ -2,6 +2,8 @@ import sqlite3
 from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
 
+default_password="pbkdf2:sha256:50000$bS6FggcU$6a995088dbbd98a95a1f308cd26f6610deb835db613dcdc740ec06907b40a391"
+
 class db_manager(object):
 
 	def __init__(self):
@@ -33,10 +35,10 @@ class db_manager(object):
 		self.cursor.execute(create_users)
 		self.connection.commit()
 		if len(self.cursor.execute("SELECT * FROM users;").fetchall()) == 0:
-			self.cursor.execute('INSERT INTO users (nome) VALUES ("Marco")')
-			self.cursor.execute('INSERT INTO users (nome) VALUES ("Matteo")')
-			self.cursor.execute('INSERT INTO users (nome) VALUES ("Maurizio")')
-			self.cursor.execute('INSERT INTO users (nome) VALUES ("Nicola")')
+			self.cursor.execute('INSERT INTO users (nome,password) VALUES ("Marco,"'+default_password+' )')
+			self.cursor.execute('INSERT INTO users (nome,password) VALUES ("Matteo,"'+default_password+' )')
+			self.cursor.execute('INSERT INTO users (nome,password) VALUES ("Maurizio,"'+default_password+' )')
+			self.cursor.execute('INSERT INTO users (nome,password) VALUES ("Nicola,"'+default_password+' )')
 			self.connection.commit()
 
 		# initialize cost table
@@ -163,7 +165,6 @@ class db_manager(object):
 			SELECT id, nome, password , is_admin 
 			FROM users
 			WHERE nome = ?
-			GROUP BY nome
 			"""
 		res=self.cursor.execute(select_command, [nome]).fetchone()
 		if check_password_hash(res[2],password):

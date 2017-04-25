@@ -28,6 +28,7 @@ class User(object):
 			user=User(db_manager().get_user(a_id))
 			return (User(a_id=user[0],nome=user[1], password=user[2],is_admin=user[3]))
 		except:
+			print ('errore nel caricamento dell\'utente')
 			return None 
 
 	def add_to_db(self):
