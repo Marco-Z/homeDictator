@@ -48,5 +48,13 @@ td{
     filter: brightness(100);
 }
 #home-dict{
-	margin-right: 0 !important\
+	margin-right: 0 !important
+}
+
+#avatar{
+	max-height: 52px !important;
+	padding-top: 8px !important;
+	line-height: 64px !important;
+	vertical-align: middle !important;
+	margin-top: -8px !important;
 }

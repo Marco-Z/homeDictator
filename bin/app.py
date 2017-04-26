@@ -33,10 +33,16 @@ def load_user(a_id):
 #----
 @app.route("/", methods=['GET','POST'])
 def index():
+	nome=None
+	try:
+		nome=mydb.get_user_by_id(current_user.get_id())[1]
+		print(nome)
+	except:
+		pass
 	if request.method == 'POST':
-		if 'username' in session:
-			print( 'Logged in as %s' % escape(session['username']))
-		n = request.form['nome']
+		if not nome :
+			error="Bisogna effettuare il login prima di continuare"
+			return render_template('login.html', error=error)
 		a = request.form['attivita']
 		mydb.insert(n,a,date.today())
 	res = mydb.get_activities()
@@ -48,7 +54,7 @@ def index():
 		punteggi.update(activity(a, mydb.get_times_for_activity(a)))
 	nomi = mydb.retrieve_debts()
 	todo = log.to_do()
-	return render_template('index.html', res=res, attivita=attivita,p=punteggi,nomi=nomi,todo=todo)
+	return render_template('index.html', res=res, attivita=attivita,p=punteggi,nomi=nomi,todo=todo,nome=nome)
 
 @app.route("/punti/<attivita>")
 def punti(attivita):
@@ -57,6 +63,12 @@ def punti(attivita):
 
 @app.route("/cancella", methods=['GET','POST'])
 def cancella():
+	nome=""
+	try:
+		nome=mydb.get_user_by_id(current_user.get_id())[1]
+		print(nome)
+	except:
+		pass
 	if request.method == 'POST':
 		ac = request.form['attivita']
 		print(ac)
@@ -67,10 +79,16 @@ def cancella():
 		lista = []
 		for row in res:
 			lista.append(log(row))
-		return render_template('lista.html',lista=lista)
+		return render_template('lista.html',lista=lista,nome=nome)
 
 @app.route("/paga", methods=['POST'])
 def paga():
+	nome=""
+	try:
+		nome=mydb.get_user_by_id(current_user.get_id())[1]
+		print(nome)
+	except:
+		pass
 	nome = request.form['nome']
 	importo = float(request.form['importo'])
 	desc = request.form['descrizione']
@@ -94,6 +112,13 @@ def pull():
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
+	nome=""
+	try:
+		nome=mydb.get_user_by_id(current_user.get_id())[1]
+		error="Hai già eseguito l'accesso"
+		return render_template('login.html',error=error,nome=nome)
+	except:
+		pass
 	if request.method == 'POST':
 		user = request.form['username']
 		pssw=request.form['password']
@@ -117,11 +142,15 @@ def login():
 @app.route('/secret', methods = ['GET'])
 @login_required
 def secret():
-	print('utente',current_user.get_id())
-	return 'muschio'
+	return "ciao : "+mydb.get_user_by_id(current_user.get_id())[1]
 
 @app.route("/spesa", methods=['GET','POST'])
 def la_spesa():
+	nome=None
+	try:
+		nome=mydb.get_user_by_id(current_user.get_id())[1]
+	except:
+		pass
 	s = spesa()
 	if request.method == 'POST':
 		testoh = request.form['spesa']
@@ -129,12 +158,25 @@ def la_spesa():
 		return redirect(url_for('index'))
 	else:
 		testoh = s.leggi()
-		return render_template('spesa.html',testoh=testoh)
+		return render_template('spesa.html',testoh=testoh,nome=nome)
 
 @app.route("/lista_spese")
 def lista_spese():
+	nome=None
+	try:
+		nome=mydb.get_user_by_id(current_user.get_id())[1]
+	except:
+		pass
 	res = mydb.retrieve_movimenti()
 	lista_movimenti = []
 	for mov in res:
 		lista_movimenti.append(movimento(mov))
-	return render_template('movimenti.html',lista=lista_movimenti)
+	return render_template('movimenti.html',lista=lista_movimenti,nome=nome)
+
+@app.route("/images/<string:nome>.jpg")
+def getImage(nome):
+	image_binary=mydb.get_avatar_from_name(nome);
+	response = make_response(image_binary)
+	response.headers['Content-Type'] = 'image/jpeg'
+	#response.headers['Content-Disposition'] = 'attachment; filename=%s.jpg'%(nome) per il download
+	return response

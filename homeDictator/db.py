@@ -202,11 +202,21 @@ class db_manager(object):
 		try:
 			blob=image.read()
 			sql="update users set avatar = ? where nome= ? "
-			res=res=self.cursor.execute(sql, [sqlite3.Binary(blob),nome])
+			res=self.cursor.execute(sql, [sqlite3.Binary(blob),nome])
 			self.connection.commit()
 			return True
 		except Exception as e:
-			print("error while %s was changing his avatar" %(nome) )
+			print("error while %s was changing avatar" %(nome) )
 		else:
 			return False
 
+	def get_avatar_from_name(self,nome):
+		blob=None
+		try:
+			sql="select avatar from users where nome = ?"
+			res=self.cursor.execute(sql, [nome]).fetchone()[0]
+			return res
+		except Exception as e:
+			print("error while retriving %s's avatar" %(nome) )
+		else:
+			return None

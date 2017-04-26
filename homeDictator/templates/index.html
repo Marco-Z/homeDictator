@@ -15,76 +15,20 @@
 		 $(document).ready(function() {
 		$('select').material_select();
 		$('.button-collapse').sideNav();
-		$('#dropnav').dropdown();
-		$('#dropbar').dropdown();
+		$('#dropnav').dropdown({ hover: true, belowOrigin: false });
+		$('#dropbar').dropdown({ hover: false, belowOrigin: false });
 	  });
 	</script>
 </head>
 <body>
-	{% if todo|length > 0%}
-	<ul id="dropdown1" class="dropdown-content">
-		{% for attivita in todo %}
-		<li><a href="#!">{{ attivita }}</a></li>
-		{% endfor %}
-	</ul>
-	{% endif %}
-
-
-
-	<nav class="grey darken-3">
-		<div class="nav-wrapper">
-			<a href="#!" class="brand-logo center"><i class="material-icons left" id="home-dict">home</i>Dictator</a>
-			<a href="#" data-activates="mobile-demo" class="button-collapse">
-				<i class="material-icons">menu</i>
-			</a>
-			<ul id="nav-mobile" class="left hide-on-med-and-down">
-				<li><a href="/cancella"><i class="material-icons left">delete_sweep</i></a></li>
-				<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
-				<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">attach_money</i></a></li>
-				{% if todo|length > 0%}
-				<!-- Dropdown Trigger -->
-				<li><a class="dropdown-button red" href="#!" id="dropnav" data-activates="dropdown1">{{ todo|length }} da fare<i class="material-icons right">arrow_drop_down</i></a></li>					
-				{% endif %}
-
-			</ul>
-			<ul id="nav-mobile" class="right hide-on-med-and-down">
-			<li><a href="/login"><i class="material-icons left pulse">perm_identity</i>Login</a></li>
-			</ul>
-			<ul class="side-nav" id="mobile-demo">
-				<li><div class="userView">
-					<div class="background">
-						<img src="{{ url_for('static',filename='img/low-poly.jpg')}}">
-					</div>
-					<a href="#!user"><img class='circle' src="{{ url_for('static',filename='img/avatar.jpg')}}"></a>
-					<a href="#!name">Gabe Newell</span></a>
-				</div></li>
-				<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
-				<li><a href="/login"><i class="material-icons left">perm_identity</i>Login</a></li>
-				<li class="divider"></li>
-				<li><a href="/cancella"><i class="material-icons left">delete_sweep</i>Lista attività</a></li>
-				<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i>Lista della spesa</a></li>
-				<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">attach_money</i>Gestione soldi</a></li>
-				{% if todo|length > 0%}
-				<!-- Dropdown Trigger -->
-				<li><a class="dropdown-button red" href="#!" id="dropbar" data-activates="dropdown1">{{ todo|length }} da fare<i class="material-icons right">arrow_drop_down</i></a></li>					
-				{% endif %}
-
-				
-			</ul>
-		</div>
-	</nav>
+{%include 'navbar_sidebar.html'%}
 	<div class="row">
 		<div class="col s12 m6">
+		{%if nome %}
           <div class="card">
             <div class="card-content white-text">
 				<form method="POST" action="/">
 					<div class="input-field">
-						<select name="nome">
-							<option value="" disabled selected>Nome</option>
-							{% for nome in nomi %}
-							<option value="{{ nome[0] }}">{{ nome[0] }}</option>
-							{% endfor %}
-						</select>
 					</div>
 					<select name="attivita">
 					<option value="" disabled selected>Attività</option>
@@ -96,6 +40,7 @@
 				</form>
             </div>
           </div>
+        {% endif %}
 			<div class="card">
 				<div class="card-content white-text">
 			  	  <canvas id="myChart"></canvas>
@@ -135,46 +80,46 @@
 				</div>
 			</div>
 		</div>
-        <div class="col s12 m6">
-          <div class="card">
-            <div class="card-content white-text">
-				<form method="POST" action="/paga">
-        			<div class="col s6 m6">
-						<div class="input-field">
-							<select name="nome">
-								<option value="" disabled selected>Nome</option>
-								{% for nome in nomi %}
-								<option value="{{ nome[0] }}">{{ nome[0] }}</option>
-								{% endfor %}
-							</select>
+		<div class="col s12 m6">
+			<div class="card">
+				<div class="card-content white-text">
+					<form method="POST" action="/paga">
+						<div class="col s6 m6">
+							<div class="input-field">
+								<select name="nome">
+									<option value="" disabled selected>Nome</option>
+									{% for nome in nomi %}
+									<option value="{{ nome[0] }}">{{ nome[0] }}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<div class="input-field">
+								<label>Importo €</label>
+								<input type="number" name="importo" step="0.01" min="0">
+							</div>
+							<div class="input-field">
+								<label>Descrizione</label>
+								<input type="text" name="descrizione">
+							</div>
 						</div>
-						<div class="input-field">
-							<label>Importo €</label>
-							<input type="number" name="importo" step="0.01" min="0">
+						<div class="col s6 m6">
+							<div class="input-field">
+								<table>
+									<tbody>
+										{% for nome in nomi %}
+										<tr>
+											<td>{{ nome[0] }}</td>
+											<td><input type="number" name="{{ nome[0] }}" value="1" min="0"></td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
 						</div>
-						<div class="input-field">
-							<label>Descrizione</label>
-							<input type="text" name="descrizione">
-						</div>
-					</div>
-        			<div class="col s6 m6">
-						<div class="input-field">
-						  <table>
-					        <tbody>
-					          {% for nome in nomi %}
-								<tr>
-								  <td>{{ nome[0] }}</td>
-								  <td><input type="number" name="{{ nome[0] }}" value="1" min="0"></td>
-								</tr>
-					          {% endfor %}
-					        </tbody>
-					      </table>
-				        </div>
-					</div>
-					<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
-				</form>
-            </div>
-          </div>
+						<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
+					</form>
+				</div>
+			</div>
         </div>
         <div class="col s12 m6">
           <div class="card">
@@ -200,4 +145,5 @@
           </div>
         </div>
       </div>
+}
 </body>

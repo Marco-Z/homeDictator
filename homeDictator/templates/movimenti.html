@@ -17,34 +17,7 @@
 	</script>
 </head>
 <body>
-	<nav class="grey darken-3">
-	<div class="nav-wrapper">
-			<a href="/" class="brand-logo center"><i class="material-icons left" id="home-dict">home</i>Dictator</a>
-			<a href="#" data-activates="mobile-demo" class="button-collapse">
-				<i class="material-icons">menu</i>
-			</a>
-			<ul id="nav-mobile" class="left hide-on-med-and-down">
-				<li><a href="/cancella"><i class="material-icons left">delete_sweep</i></a></li>
-				<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
-				<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">attach_money</i></a></li>
-			</ul>			
-			<ul class="side-nav" id="mobile-demo">
-				<li><div class="userView">
-					<div class="background">
-						<img src="{{ url_for('static',filename='img/low-poly.jpg')}}">
-					</div>
-					<a href="#!user"><img class='circle' src="{{ url_for('static',filename='img/avatar.jpg')}}"></a>
-					<a href="#!name">Gabe Newell</span></a>
-				</div></li>
-				<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
-				<li><a href="/login"><i class="material-icons left">perm_identity</i>Login</a></li>
-				<li class="divider"></li>
-				<li><a href="/cancella"><i class="material-icons left">delete_sweep</i>Lista attività</a></li>
-				<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i>Lista della spesa</a></li>
-				<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">attach_money</i>Gestione soldi</a></li>				
-			</ul>
-		</div>
-	</nav>
+	{%include 'navbar_sidebar.html'%}
 	<div class="row">
 		<div class="col s12">
           <div class="card">
