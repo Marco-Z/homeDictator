@@ -3,6 +3,7 @@ from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
 
 default_password="pbkdf2:sha256:50000$bS6FggcU$6a995088dbbd98a95a1f308cd26f6610deb835db613dcdc740ec06907b40a391"
+avatar= open('homeDictator/static/img/avatar.jpg','rb').read()
 
 class db_manager(object):
 
@@ -28,17 +29,18 @@ class db_manager(object):
 			id INTEGER PRIMARY KEY AUTOINCREMENT, 
 			nome TEXT NOT NULL UNIQUE, 
 			credito REAL DEFAULT 0, 
-			password TEXT DEFAULT 'password', 
-			is_admin INTEGER DEFAULT 0 );
-			"""
+			password TEXT DEFAULT "%s" , 
+			is_admin INTEGER DEFAULT 0,
+			avatar BLOB DEFAULT "%s" );
+			""" %(default_password,sqlite3.Binary(avatar))
 
 		self.cursor.execute(create_users)
 		self.connection.commit()
 		if len(self.cursor.execute("SELECT * FROM users;").fetchall()) == 0:
-			self.cursor.execute('INSERT INTO users (nome,password) VALUES ("Marco,"'+default_password+' )')
-			self.cursor.execute('INSERT INTO users (nome,password) VALUES ("Matteo,"'+default_password+' )')
-			self.cursor.execute('INSERT INTO users (nome,password) VALUES ("Maurizio,"'+default_password+' )')
-			self.cursor.execute('INSERT INTO users (nome,password) VALUES ("Nicola,"'+default_password+' )')
+			self.cursor.execute('INSERT INTO users (nome) VALUES ("Marco")')
+			self.cursor.execute('INSERT INTO users (nome) VALUES ("Matteo")')
+			self.cursor.execute('INSERT INTO users (nome) VALUES ("Maurizio")')
+			self.cursor.execute('INSERT INTO users (nome) VALUES ("Nicola")')
 			self.connection.commit()
 
 		# initialize cost table
@@ -62,6 +64,22 @@ class db_manager(object):
 			data TEXT);
 			"""
 		self.cursor.execute(create_command)
+
+	def upgrade(self):
+		sql="PRAGMA user_version"
+		version =self.cursor.execute(sql).fetchone()[0]
+		if version == 0:
+			try:
+				sql="""	ALTER TABLE users ADD COLUMN password TEXT DEFAULT "%s";
+						ALTER TABLE users ADD COLUMN is_admin INT DEFAULT 0;
+						ALTER TABLE users ADD COLUMN avatar BLOB "%s"; """ %(default_password,sqlite3.Binary(avatar))
+				self.cursor.executescript()
+				sql="PRAGMA user_version=1"
+				version =self.cursor.execute(sql)
+				self.connection.commit()
+				print("\n","UPGRADE SUCCESFULLY TO DB VERSION 1.0","\n")
+			except:
+				print("\n","FAILED TO UPGRADE DB TO VERSION 1.0","\n")
 
 	def reset(self):
 		delete_command = """
