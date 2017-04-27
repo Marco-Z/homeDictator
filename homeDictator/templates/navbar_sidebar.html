@@ -33,8 +33,8 @@
 			</ul>
 			{%else%}
 
-			<li><a href="/account"><img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive"></a></li>
-			<li><a href="/login"><span class="white-text " style="margin-right: 10px;"><b >{{nome}}</b></span></a></li>
+			<li><a href="/user"><img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive"></a></li>
+			<li><a href="/user"><span class="white-text " style="margin-right: 10px;"><b >{{nome}}</b></span></a></li>
 			</ul>
 
 			{% endif %}
@@ -51,7 +51,11 @@
 						{% endif %}
 					</div></li>
 				<li><a href="/"><i class="material-icons left">home</i>Home</a></li>
+				{% if not nome %}
 				<li><a href="/login"><i class="material-icons left">perm_identity</i>Login</a></li>
+				{%else%}
+				<li><a href="/user"><i class="material-icons left">perm_identity</i>Account</a></li>
+				{%endif%}
 				<li class="divider"></li>
 				<li><a href="/cancella"><i class="material-icons left">delete_sweep</i>Lista attività</a></li>
 				<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i>Lista della spesa</a></li>

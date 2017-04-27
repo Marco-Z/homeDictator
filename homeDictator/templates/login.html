@@ -28,7 +28,7 @@
 				<span class="card-title">Login</span>
 				{% if error %}
 				<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
-				{% endif %}
+				{% else %}
 					<form class="login-form" method="post" action="/login">
 						<div class='row margin'>
 							<div class='input-field col s12'>
@@ -38,19 +38,26 @@
 							</div>
 						</div>
 
-						<div class='row'>
+						<div class='row margin'>
 							<div class='input-field col s12'>
 								<i class="material-icons prefix">lock_outline</i>
 								<input class='validate' type='password' name='password' id='password' class="validate">
 								<label for='password'>password</label>
 							</div>
 						</div>
+						<div class="row">          
+				          <div class="input-field col s12 m12 l12  login-text">
+				              <input type="checkbox" id="remember-me">
+				              <label for="remember-me">Remember me</label>
+				          </div>
+				        </div>
 						<center>
 							<div class='row'>
 								<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
 							</div>
 						</center>
 					</form>
+					{%endif%}
 				</div>
 			</div>
 		</div>
@@ -62,7 +69,7 @@
 					<span class="card-title">Login</span>
 					{% if error %}
 					<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
-					{% endif %}
+					{% else %}
 					<form class="login-form" method="post" action="/login">
 						<div class='row margin'>
 							<div class='input-field col s12'>
@@ -72,19 +79,26 @@
 							</div>
 						</div>
 
-						<div class='row'>
+						<div class='row margin'>
 							<div class='input-field col s12'>
 								<i class="material-icons prefix">lock_outline</i>
 								<input class='validate' type='password' name='password' id='password' class="validate">
 								<label for='password'>password</label>
 							</div>
 						</div>
+						<div class="row">          
+				          <div class="input-field col s12 m12 l12  login-text">
+				              <input type="checkbox" id="remember-me">
+				              <label for="remember-me">Remember me</label>
+				          </div>
+				        </div>
 						<center>
 							<div class='row'>
 								<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
 							</div>
 						</center>
 					</form>
+					{%endif%}
 				</div>
 			</div>
 		</div>

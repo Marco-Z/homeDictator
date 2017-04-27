@@ -32,7 +32,7 @@ def load_user(a_id):
 	return None
 #----
 @app.route("/", methods=['GET','POST'])
-def index():
+def index(error=None):
 	nome=None
 	try:
 		nome=mydb.get_user_by_id(current_user.get_id())[1]
@@ -54,7 +54,7 @@ def index():
 		punteggi.update(activity(a, mydb.get_times_for_activity(a)))
 	nomi = mydb.retrieve_debts()
 	todo = log.to_do()
-	return render_template('index.html', res=res, attivita=attivita,p=punteggi,nomi=nomi,todo=todo,nome=nome)
+	return render_template('index.html', res=res, attivita=attivita,p=punteggi,nomi=nomi,todo=todo,nome=nome,error=error)
 
 @app.route("/punti/<attivita>")
 def punti(attivita):
@@ -64,16 +64,25 @@ def punti(attivita):
 @app.route("/cancella", methods=['GET','POST'])
 def cancella():
 	nome=""
+	error=""
 	try:
 		nome=mydb.get_user_by_id(current_user.get_id())[1]
 		print(nome)
 	except:
 		pass
 	if request.method == 'POST':
-		ac = request.form['attivita']
-		print(ac)
-		mydb.delete(ac)
-		return redirect(url_for('cancella'))
+		try:
+			ac = request.form['attivita']
+			print(ac)
+			mydb.delete(ac)
+		except:
+			error="Errore nel cancellare l'attività, riprovare"
+		finally:
+			res = mydb.retrieve_all()
+			lista = []
+			for row in res:
+				lista.append(log(row))
+			return render_template('lista.html',lista=lista,nome=nome,error=error)
 	else:
 		res = mydb.retrieve_all()
 		lista = []
@@ -87,22 +96,23 @@ def paga():
 	try:
 		nome=mydb.get_user_by_id(current_user.get_id())[1]
 		print(nome)
+		nome = request.form['nome']
+		importo = float(request.form['importo'])
+		desc = request.form['descrizione']
+		nomi = mydb.retrieve_debts()
+		paga = dict()
+		somma = 0
+		for n in nomi:
+			paga[n[0]] = int(request.form[n[0]])
+			somma = somma + paga[n[0]]
+		mydb.update_credit(nome,importo)
+		for n in nomi:
+			mydb.update_credit(n[0],-(importo*(paga[n[0]]/somma)))
+		mydb.logga_movimento(nome,importo,desc)
+		return redirect(url_for('index'))
 	except:
-		pass
-	nome = request.form['nome']
-	importo = float(request.form['importo'])
-	desc = request.form['descrizione']
-	nomi = mydb.retrieve_debts()
-	paga = dict()
-	somma = 0
-	for n in nomi:
-		paga[n[0]] = int(request.form[n[0]])
-		somma = somma + paga[n[0]]
-	mydb.update_credit(nome,importo)
-	for n in nomi:
-		mydb.update_credit(n[0],-(importo*(paga[n[0]]/somma)))
-	mydb.logga_movimento(nome,importo,desc)
-	return redirect(url_for('index'))
+		error="Oops, qualcoca è andato storto, controlla di aver inserito i dati correttamente"
+		return redirect(url_for('index'))
 
 @app.route("/pull")
 def pull():
@@ -180,3 +190,19 @@ def getImage(nome):
 	response.headers['Content-Type'] = 'image/jpeg'
 	#response.headers['Content-Disposition'] = 'attachment; filename=%s.jpg'%(nome) per il download
 	return response
+
+@app.route("/logout")
+@login_required
+def logout():
+	logout_user()
+	return redirect(url_for('index'))
+
+@app.route("/user")
+@login_required
+def user_page():
+	nome=None
+	try:
+		nome=mydb.get_user_by_id(current_user.get_id())[1]
+	except:
+		pass
+	return render_template('user.html',nome=nome)

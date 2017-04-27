@@ -22,8 +22,14 @@
 		<div class="col s12">
           <div class="card">
             <div class="card-content white-text">
+            <span class="card-title">Attività svolte:</span>
+            {%if error%}
+            <span>{{error}}</span>
+            {%endif%}
 			  <form action="/cancella" method="POST">
-			  	<button type="submit" class="right waves-effect waves-light btn red">Cancella</button>
+			  	 <button class="btn waves-effect waves-light red right" type="submit" name="action">
+				    <i class="material-icons">delete_forever</i>Cancella</button>
+				  </button>
 			  	<table>
 				  {% for entry in lista %}
 				  	<tr>
