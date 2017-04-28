@@ -53,8 +53,15 @@ td{
 
 #avatar{
 	max-height: 52px !important;
-	padding-top: 8px !important;
 	line-height: 64px !important;
 	vertical-align: middle !important;
-	margin-top: -8px !important;
+	margin-top: -2px !important;
+}
+
+#nav-mobile>li {
+	max-height: 64px !important;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }

@@ -76,7 +76,7 @@ def cancella():
 			print(ac)
 			mydb.delete(ac)
 		except:
-			error="Errore nel cancellare l'attività, riprovare"
+			error="Errore nel cancellare l'attivita', riprovare"
 		finally:
 			res = mydb.retrieve_all()
 			lista = []
@@ -185,7 +185,7 @@ def lista_spese():
 
 @app.route("/images/<string:nome>.jpg")
 def getImage(nome):
-	image_binary=mydb.get_avatar_from_name(nome);
+	image_binary=mydb.get_avatar_from_name(nome)
 	response = make_response(image_binary)
 	response.headers['Content-Type'] = 'image/jpeg'
 	#response.headers['Content-Disposition'] = 'attachment; filename=%s.jpg'%(nome) per il download

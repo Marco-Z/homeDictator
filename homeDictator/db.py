@@ -3,7 +3,7 @@ from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
 
 default_password="pbkdf2:sha256:50000$bS6FggcU$6a995088dbbd98a95a1f308cd26f6610deb835db613dcdc740ec06907b40a391"
-avatar= open('homeDictator/static/img/avatar.jpg','rb').read()
+default_avatar= open('homeDictator/static/img/avatar.jpg','rb').read()
 
 class db_manager(object):
 
@@ -32,7 +32,7 @@ class db_manager(object):
 			password TEXT DEFAULT "%s" , 
 			is_admin INTEGER DEFAULT 0,
 			avatar BLOB DEFAULT "%s" );
-			""" %(default_password,sqlite3.Binary(avatar))
+			""" %(default_password,sqlite3.Binary(default_avatar))
 
 		self.cursor.execute(create_users)
 		self.connection.commit()
@@ -70,14 +70,14 @@ class db_manager(object):
 		version =self.cursor.execute(sql).fetchone()[0]
 		if version == 0:
 			try:
-				sql="""	ALTER TABLE users ADD COLUMN password TEXT DEFAULT "%s";
-						ALTER TABLE users ADD COLUMN is_admin INT DEFAULT 0;
-						ALTER TABLE users ADD COLUMN avatar BLOB "%s"; """ %(default_password,sqlite3.Binary(avatar))
-				self.cursor.executescript()
+				self.cursor.execute('ALTER TABLE users ADD COLUMN password TEXT DEFAULT "%s"'%(default_password))
+				self.cursor.execute('ALTER TABLE users ADD COLUMN is_admin INT DEFAULT 0;')
+				self.cursor.execute('ALTER TABLE users ADD COLUMN avatar BLOB')
+				self.cursor.execute('UPDATE users SET avatar = (?)', [default_avatar])
 				sql="PRAGMA user_version=1"
-				version =self.cursor.execute(sql)
+				version =self.cursor.execute(sql).fetchone()[0]
 				self.connection.commit()
-				print("\n","UPGRADE SUCCESFULLY TO DB VERSION 1.0","\n")
+				print("\n","UPGRADE SUCCESFULLY TO DB VERSION %s"%(version),"\n")
 			except:
 				print("\n","FAILED TO UPGRADE DB TO VERSION 1.0","\n")
 
@@ -229,12 +229,13 @@ class db_manager(object):
 			return False
 
 	def get_avatar_from_name(self,nome):
-		blob=None
 		try:
 			sql="select avatar from users where nome = ?"
-			res=self.cursor.execute(sql, [nome]).fetchone()[0]
-			return res
-		except Exception as e:
+			res=self.cursor.execute(sql, [nome]).fetchone()[0
+			if res:
+				return res
+			else:
+				return default_avatar
+		except :
 			print("error while retriving %s's avatar" %(nome) )
-		else:
-			return None
+			return default_avatar

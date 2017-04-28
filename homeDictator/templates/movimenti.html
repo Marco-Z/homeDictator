@@ -20,50 +20,46 @@
 	{%include 'navbar_sidebar.html'%}
 	<div class="row">
 		<div class="col s12">
-          <div class="card">
-            <div class="card-content white-text">
-			  	<table>
-			  		<tr>
-			  			<td>
-			  				<h4>Creditore</h4>
-			  			</td>
-			  			<td>
-			  				<h4>Importo</h4>
-			  			</td>
-			  			<td>
-			  				<h4>Data</h4>
-			  			</td>
-			  			<td>
-			  				<h4>Descrizione</h4>
-			  			</td>
-			  		</tr>
-				  {% for entry in lista %}
-				  	<tr>
-					  <td>
-					  	<p>
-					  		{{ entry.nome }}
-					  	</p>
-					  </td>
-					  <td>
-					  	<p>
-					  		{{ "{0:.2f}".format(entry.importo) }} €
-					  	</p>
-					  </td>
-					  <td>
-					  	<p>
-					  		{{ entry.data }}
-					  	</p>
-					  </td>
-					  <td>
-					  	<p>
-					  		{{ entry.descrizione }}
-					  	</p>
-					  </td>
-				    </tr>
-				  {% endfor %}
-			  	</table>
-            </div>
-          </div>
+			<div class="card">
+				<div class="card-content white-text">
+					<table class="">
+						<thead>
+							<tr>
+								<th>
+								Creditore
+								</th>
+								<th>
+								Importo
+								</th>
+								<th>
+								Data
+								</th>
+								<th>
+								Descrizione
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for entry in lista %}
+							<tr>
+								<td>
+										{{ entry.nome }}
+								</td>
+								<td>
+										{{ "{0:.2f}".format(entry.importo) }} €
+								</td>
+								<td>
+										{{ entry.data }}
+								</td>
+								<td>
+										{{ entry.descrizione }}
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
-      </div>
+	</div>
 </body>
