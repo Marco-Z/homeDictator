@@ -29,6 +29,9 @@
 				{% if error %}
 				<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
 				{% else %}
+				{% if wrong %}
+					<span class="red-text"><strong>Errore:</strong> {{ wrong }}</span>
+					{%endif%}
 					<form class="login-form" method="post" action="/login">
 						<div class='row margin'>
 							<div class='input-field col s12'>
@@ -47,8 +50,8 @@
 						</div>
 						<div class="row">          
 				          <div class="input-field col s12 m12 l12  login-text">
-				              <input type="checkbox" id="remember-me">
-				              <label for="remember-me">Remember me</label>
+				              <input type="checkbox" id="remember-me" name="remember-me">
+				              <label for="remember-me">Ricordami</label>
 				          </div>
 				        </div>
 						<center>
@@ -70,6 +73,9 @@
 					{% if error %}
 					<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
 					{% else %}
+					{% if wrong %}
+					<span class="red-text"><strong>Errore:</strong> {{ wrong }}</span>
+					{%endif%}
 					<form class="login-form" method="post" action="/login">
 						<div class='row margin'>
 							<div class='input-field col s12'>
@@ -87,10 +93,9 @@
 							</div>
 						</div>
 						<div class="row">          
-				          <div class="input-field col s12 m12 l12  login-text">
-				              <input type="checkbox" id="remember-me">
-				              <label for="remember-me">Remember me</label>
-				          </div>
+				              <input type="checkbox" id="remember-me-s" name="remember-me">
+				              <label for="remember-me-s">Remember me</label>
+
 				        </div>
 						<center>
 							<div class='row'>

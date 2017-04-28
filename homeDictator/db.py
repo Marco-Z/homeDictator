@@ -231,7 +231,7 @@ class db_manager(object):
 	def get_avatar_from_name(self,nome):
 		try:
 			sql="select avatar from users where nome = ?"
-			res=self.cursor.execute(sql, [nome]).fetchone()[0
+			res=self.cursor.execute(sql, [nome]).fetchone()[0]
 			if res:
 				return res
 			else:

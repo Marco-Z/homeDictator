@@ -130,21 +130,25 @@ def login():
 	except:
 		pass
 	if request.method == 'POST':
-		user = request.form['username']
-		pssw=request.form['password']
-		#print(mydb.update_password(user,pssw))
-		#return a user ,only if the username and password are correct 
-		usr= User.get_usr_by_username_and_password(username=user,password=pssw)
-		print ("login in corso")
-		if usr:
-			print("loggato :" ,usr.username)
-			login_user(usr,remember=True)
-			return redirect(url_for('index'))
-		error="Username o password sbagliati"
-		return render_template('login.html',error=error)
+		try:
+			user = request.form['username']
+			pssw=request.form['password']
+			remember=None
+			try:
+				remember=bool(request.form['remember-me'])
+			except:
+				remember=False
+			usr= User.get_usr_by_username_and_password(username=user,password=pssw)
+			if usr:
+				print("loggato :" ,usr.username)
+				login_user(usr,remember=remember)
+				return redirect(url_for('index'))
+		except:
+			wrong="Username o password sbagliati"
+			return render_template('login.html',wrong=wrong)
 
-	else:
-		return render_template('login.html')
+	
+	return render_template('login.html')
 
 
 

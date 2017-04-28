@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <head>
 	<title>homeDictator</title>
 	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
@@ -32,65 +32,67 @@
 			</div>
 		</div>
 		{%endif%}
-	<div class="row">
-		<div class="col s12 m6">
-		{%if nome %}
-          <div class="card">
-            <div class="card-content white-text">
-				<form method="POST" action="/">
-					<div class="input-field">
+		<div class="row">
+			{%if nome %}
+			<div class="col s12 m6">
+				<div class="card">
+					<div class="card-content white-text">
+						<form method="POST" action="/">
+							<div class="input-field">
+							</div>
+							<select name="attivita">
+								<option value="" disabled selected>Attività</option>
+								{% for a in attivita %}
+								<option value="{{ a }}">{{ a }}</option>
+								{% endfor %}
+							</select>
+							<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
+						</form>
 					</div>
-					<select name="attivita">
-					<option value="" disabled selected>Attività</option>
-					{% for a in attivita %}
-						<option value="{{ a }}">{{ a }}</option>
-					{% endfor %}
-					</select>
-					<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
-				</form>
-            </div>
-          </div>
-        {% endif %}
-			<div class="card">
-				<div class="card-content white-text">
-			  	  <canvas id="myChart"></canvas>
-				  <script>
-					var ctx = document.getElementById("myChart");
-					var myChart = new Chart(ctx, {
-						maintainAspectRatio: false,
-					    type: 'bar',
-					    data: {
-					        labels: [   {% for entry in p.punteggi %}
-										'{{ entry }}',
-										{% endfor %}
-									],
-					        fontColor: '#fff',
-					        datasets: [{
-					            data: [ {% for entry in p.punteggi %}
-										{{ p.punteggi[entry] }},
-										{% endfor %}
-									  ],
-					            backgroundColor: '#2196F3'
-					        }]
-					    },
-					    options: {
-					        scales: {
-					            yAxes: [{
-					                ticks: {
-					                    beginAtZero:true
-					                }
-					            }]
-					        },
-					        legend: {
-					            display: false,
-					        }
-					    }
-					});
-				  </script>
 				</div>
 			</div>
-		</div>
-		<div class="row">
+			{% endif %}
+			<div class="col s12 m6">
+				<div class="card">
+					<div class="card-content white-text">
+						<canvas id="myChart"></canvas>
+						<script>
+							var ctx = document.getElementById("myChart");
+							var myChart = new Chart(ctx, {
+								maintainAspectRatio: false,
+								type: 'bar',
+								data: {
+									labels: [   {% for entry in p.punteggi %}
+									'{{ entry }}',
+									{% endfor %}
+									],
+									fontColor: '#fff',
+									datasets: [{
+										data: [ {% for entry in p.punteggi %}
+										{{ p.punteggi[entry] }},
+										{% endfor %}
+										],
+										backgroundColor: '#2196F3'
+									}]
+								},
+								options: {
+									scales: {
+										yAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}]
+									},
+									legend: {
+										display: false,
+									}
+								}
+							});
+						</script>
+					</div>
+				</div>
+			</div>
+
 		<div class="col s12 m6">
 			<div class="card">
 				<div class="card-content white-text">
