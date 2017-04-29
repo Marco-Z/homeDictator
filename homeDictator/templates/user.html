@@ -1,0 +1,62 @@
+<!doctype html>
+<head>
+	<title>homeDictator</title>
+	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
+    <link href="{{ url_for('static',filename='css/materialize.min.css')}}" rel="stylesheet" type="text/css">
+	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
+	<link href="{{ url_for('static',filename='css/material-icon.css')}}" rel="stylesheet">
+	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
+	<script type="text/javascript" src="{{ url_for('static',filename='js/Chart.min.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/materialize.js')}}"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+	<script>
+		 $(document).ready(function() {
+		$('select').material_select();
+		$('.button-collapse').sideNav();
+		$('#dropnav').dropdown({ hover: true, belowOrigin: false });
+		$('#dropbar').dropdown({ hover: false, belowOrigin: false });
+	  });
+	</script>
+</head>
+<body>
+{%include 'navbar_sidebar.html'%}
+	<div class="row">
+		<div class="col s12" style="padding-top: 8px;">
+
+			<h4 class="lato-page grey-text text-darken-1" style="display: inline; margin-bottom: 0.8rem; margin-top: 0.8rem;">
+				Gestisci il tuo account 
+				
+			</h4>
+			<a href="/logout" class="btn-flat waves-effect waves-dark white lighten-5 right" style="padding:0 1rem; margin-top: 7px;"><i class="material-icons" title="Lista movimenti">exit_to_app</i> Log off</a>
+
+			<a href="https://simplebooklet.com/help" target="_blank" class="orange-text right" style="font-size: 1rem; padding-top: 17px; padding-left: 10px; font-weight: 500; margin-right: 10px;">sample text</a>
+
+			<a href="https://simplebooklet.com/quickguidesimplebooklet" target="_blank" class="orange-text right" style="font-size: 1rem; padding-top: 17px; padding-left: 10px; font-weight: 500; margin-right: 10px;">sampl txt</a>
+
+			<a href="https://headwayapp.co/simplebooklet-updates" target="_blank" class="orange-text right CHANGE_THIS" style="font-size: 1rem; padding-top: 17px; padding-left: 10px; font-weight: 500; margin-right: 10px;">dmlp etx<span id="HW_badge_cont" class="HW_visible"><span id="HW_badge" class="HW_visible HW_animated" data-count-unseen="3">3</span></span></a>      
+		</div>
+		<div class="col s12 m6">
+			<div class="card">
+				<div class="card-content white-text">
+			  	  muaschio
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m6">
+			<div class="card">
+				<div class="card-content white-text">
+					muschio
+				</div>
+			</div>
+        </div>
+        <div class="col s12 m6">
+          <div class="card">
+            <div class="card-content white-text">
+			  muschio
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
