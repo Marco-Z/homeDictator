@@ -4,7 +4,7 @@
 	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
     <link href="{{ url_for('static',filename='css/materialize.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="{{ url_for('static',filename='css/material-icon.css')}}" rel="stylesheet">
 	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
 	<script src="{{ url_for('static',filename='js/materialize.min.js')}}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,28 +12,20 @@
 	<script>
 		 $(document).ready(function() {
 		$('select').material_select();
+		$('.button-collapse').sideNav();
 	  });
 	</script>
 </head>
 <body>
-	<nav class="grey darken-3">
-		<div class="nav-wrapper">
-		  <a href="#" class="brand-logo right">homeDictator</a>
-		  <ul id="nav-mobile" class="left">
-			<li><a href="/" class="home"><img src="{{ url_for('static',filename='img/favicon.ico')}}" title="Home"></a></li>
-			<li><a href="/cancella"><i class="material-icons" title="Lista attività">list</i></a></li>
-			<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
-			<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">assignment</i></a></li>
-		  </ul>
-		</div>
-	</nav>
+	{%include 'navbar_sidebar.html'%}
 	<div class="row">
 		<div class="col s12">
           <div class="card">
             <div class="card-content white-text">
+            <span class="card-title">Lista della spesa:</span>
 			  <form action="/spesa" method="POST">
 				<textarea id="textarea1" class="materialize-textarea" name="spesa">{{ testoh }}</textarea>
-				<label for="textarea1">Lista della spesa</label>
+				<label for="textarea1">lista della spesa</label>
           		<button type="submit" class="right waves-effect waves-light btn">Salva</button>
 			  </form>
             </div>

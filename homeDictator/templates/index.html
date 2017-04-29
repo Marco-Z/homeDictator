@@ -1,150 +1,138 @@
-<!doctype html>
+<!DOCTYPE html>
 <head>
 	<title>homeDictator</title>
 	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
     <link href="{{ url_for('static',filename='css/materialize.min.css')}}" rel="stylesheet" type="text/css">
 	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="{{ url_for('static',filename='css/material-icon.css')}}" rel="stylesheet">
 	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
-	<script src="{{ url_for('static',filename='js/materialize.min.js')}}"></script>
 	<script type="text/javascript" src="{{ url_for('static',filename='js/Chart.min.js')}}"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="{{ url_for('static',filename='js/materialize.js')}}"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
 	<script>
 		 $(document).ready(function() {
 		$('select').material_select();
+		$('.button-collapse').sideNav();
+		$('#dropnav').dropdown({ hover: true, belowOrigin: false ,constrainWidth: false});
+		$('#dropbar').dropdown({ hover: false, belowOrigin: false });
 	  });
 	</script>
 </head>
 <body>
-	<nav class="grey darken-3">
-		<div class="nav-wrapper">
-		  <div class="brand-logo right">
-		    <a href="#" class="right title">homeDictator</a>
-			{% if todo|length > 0%}
-			<!-- Dropdown Trigger -->
-			<a class='dropdown-button btn red dafare' href='#' data-activates='dropdown1'>{{ todo|length }} da fare</a>
-
-			<!-- Dropdown Structure -->
-			<ul id='dropdown1' class='dropdown-content'>
-				{% for attivita in todo %}
-				<li><a href="#!">{{ attivita }}</a></li>
-				{% endfor %}
-			</ul>
-			{% endif %}
-		  </div>
-		  <ul id="nav-mobile" class="left">
-			<li><a href="/" class="home"><img src="{{ url_for('static',filename='img/favicon.ico')}}" title="Home"></a></li>
-			<li><a href="/cancella"><i class="material-icons" title="Lista attività">list</i></a></li>
-			<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
-			<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">assignment</i></a></li>
-		  </ul>
-		  
-		</div>
-	</nav>
+{%include 'navbar_sidebar.html'%}
+	{%if error%}
 	<div class="row">
-		<div class="col s12 m6">
-          <div class="card">
-            <div class="card-content white-text">
-				<form method="POST" action="/">
-					<div class="input-field">
-						<select name="nome">
-							<option value="" disabled selected>Nome</option>
-							{% for nome in nomi %}
-							<option value="{{ nome[0] }}">{{ nome[0] }}</option>
-							{% endfor %}
-						</select>
-					</div>
-					<select name="attivita">
-					<option value="" disabled selected>Attività</option>
-					{% for a in attivita %}
-						<option value="{{ a }}">{{ a }}</option>
-					{% endfor %}
-					</select>
-					<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
-				</form>
-            </div>
-          </div>
+		<div class="col s12">
 			<div class="card">
-				<div class="card-content white-text">
-			  	  <canvas id="myChart"></canvas>
-				  <script>
-					var ctx = document.getElementById("myChart");
-					var myChart = new Chart(ctx, {
-						maintainAspectRatio: false,
-					    type: 'bar',
-					    data: {
-					        labels: [   {% for entry in p.punteggi %}
-										'{{ entry }}',
-										{% endfor %}
-									],
-					        fontColor: '#fff',
-					        datasets: [{
-					            data: [ {% for entry in p.punteggi %}
-										{{ p.punteggi[entry] }},
-										{% endfor %}
-									  ],
-					            backgroundColor: '#2196F3'
-					        }]
-					    },
-					    options: {
-					        scales: {
-					            yAxes: [{
-					                ticks: {
-					                    beginAtZero:true
-					                }
-					            }]
-					        },
-					        legend: {
-					            display: false,
-					        }
-					    }
-					});
-				  </script>
-				</div>
+	            <div class="card-content white-text">
+	            <span>{error}</span>
+	            </div>	
 			</div>
 		</div>
-        <div class="col s12 m6">
-          <div class="card">
-            <div class="card-content white-text">
-				<form method="POST" action="/paga">
-        			<div class="col s6 m6">
-						<div class="input-field">
-							<select name="nome">
-								<option value="" disabled selected>Nome</option>
-								{% for nome in nomi %}
-								<option value="{{ nome[0] }}">{{ nome[0] }}</option>
+		{%endif%}
+		<div class="row">
+			{%if nome %}
+			<div class="col s12 m6">
+				<div class="card">
+					<div class="card-content white-text">
+						<form method="POST" action="/">
+							<div class="input-field">
+							</div>
+							<select name="attivita">
+								<option value="" disabled selected>Attività</option>
+								{% for a in attivita %}
+								<option value="{{ a }}">{{ a }}</option>
 								{% endfor %}
 							</select>
-						</div>
-						<div class="input-field">
-							<label>Importo €</label>
-							<input type="number" name="importo" step="0.01" min="0">
-						</div>
-						<div class="input-field">
-							<label>Descrizione</label>
-							<input type="text" name="descrizione">
-						</div>
+							<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
+						</form>
 					</div>
-        			<div class="col s6 m6">
-						<div class="input-field">
-						  <table>
-					        <tbody>
-					          {% for nome in nomi %}
-								<tr>
-								  <td>{{ nome[0] }}</td>
-								  <td><input type="number" name="{{ nome[0] }}" value="1" min="0"></td>
-								</tr>
-					          {% endfor %}
-					        </tbody>
-					      </table>
-				        </div>
+				</div>
+			</div>
+			{% endif %}
+			<div class="col s12 m6">
+				<div class="card">
+					<div class="card-content white-text">
+						<canvas id="myChart"></canvas>
+						<script>
+							var ctx = document.getElementById("myChart");
+							var myChart = new Chart(ctx, {
+								maintainAspectRatio: false,
+								type: 'bar',
+								data: {
+									labels: [   {% for entry in p.punteggi %}
+									'{{ entry }}',
+									{% endfor %}
+									],
+									fontColor: '#fff',
+									datasets: [{
+										data: [ {% for entry in p.punteggi %}
+										{{ p.punteggi[entry] }},
+										{% endfor %}
+										],
+										backgroundColor: '#2196F3'
+									}]
+								},
+								options: {
+									scales: {
+										yAxes: [{
+											ticks: {
+												beginAtZero:true
+											}
+										}]
+									},
+									legend: {
+										display: false,
+									}
+								}
+							});
+						</script>
 					</div>
-					<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
-				</form>
-            </div>
-          </div>
+				</div>
+			</div>
+
+		<div class="col s12 m6">
+			<div class="card">
+				<div class="card-content white-text">
+					<form method="POST" action="/paga">
+						<div class="col s6 m6">
+							<div class="input-field">
+								<select name="nome">
+									<option value="" disabled selected>Creditore</option>
+									{% for nome in nomi %}
+									<option value="{{ nome[0] }}">{{ nome[0] }}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<div class="input-field">
+								<label>Importo €</label>
+								<input type="number" name="importo" step="0.01" min="0">
+							</div>
+							<div class="input-field">
+								<label>Descrizione</label>
+								<input type="text" name="descrizione">
+							</div>
+						</div>
+						<div class="col s6 m6">
+							<div class="input-field">
+								<table>
+									<tbody>
+										{% for nome in nomi %}
+										<tr>
+											<td>{{ nome[0] }}</td>
+											<td><input type="number" name="{{ nome[0] }}" value="1" min="0"></td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
+					</form>
+				</div>
+			</div>
         </div>
         <div class="col s12 m6">
           <div class="card">
@@ -168,6 +156,7 @@
 		      </table>
             </div>
           </div>
+         </div>
         </div>
       </div>
 </body>

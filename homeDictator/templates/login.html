@@ -1,0 +1,112 @@
+<!doctype html>
+<head>
+	<title>homeDictator</title>
+	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
+    <link href="{{ url_for('static',filename='css/materialize.min.css')}}" rel="stylesheet" type="text/css">
+	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
+	<link href="{{ url_for('static',filename='css/material-icon.css')}}" rel="stylesheet">
+	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
+	<script type="text/javascript" src="{{ url_for('static',filename='js/Chart.min.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/materialize.js')}}"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+	<script>
+		 $(document).ready(function() {
+		$('select').material_select();
+		$('.button-collapse').sideNav();
+		$('.dropdown-button').dropdown();
+	  });
+	</script>
+</head>
+<body>
+{%include 'navbar_sidebar.html'%}
+	<div class="row hide-on-med-and-up">
+		<div class="col s12">
+			<div class="card">
+				<div class="card-content white-text">
+				<span class="card-title">Login</span>
+				{% if error %}
+				<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
+				{% else %}
+				{% if wrong %}
+					<span class="red-text"><strong>Errore:</strong> {{ wrong }}</span>
+					{%endif%}
+					<form class="login-form" method="post" action="/login">
+						<div class='row margin'>
+							<div class='input-field col s12'>
+								<i class="material-icons prefix">account_circle</i>
+								<input  type='text' name='username' id='email' class="validate">
+								<label for='email'>nome utente</label>
+							</div>
+						</div>
+
+						<div class='row margin'>
+							<div class='input-field col s12'>
+								<i class="material-icons prefix">lock_outline</i>
+								<input class='validate' type='password' name='password' id='password' class="validate">
+								<label for='password'>password</label>
+							</div>
+						</div>
+						<div class="row">          
+				          <div class="input-field col s12 m12 l12  login-text">
+				              <input type="checkbox" id="remember-me" name="remember-me">
+				              <label for="remember-me">Ricordami</label>
+				          </div>
+				        </div>
+						<center>
+							<div class='row'>
+								<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
+							</div>
+						</center>
+					</form>
+					{%endif%}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row hide-on-small-and-down">
+		<div class="col s6 offset-s3">
+			<div class="card">
+				<div class="card-content white-text">
+					<span class="card-title">Login</span>
+					{% if error %}
+					<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
+					{% else %}
+					{% if wrong %}
+					<span class="red-text"><strong>Errore:</strong> {{ wrong }}</span>
+					{%endif%}
+					<form class="login-form" method="post" action="/login">
+						<div class='row margin'>
+							<div class='input-field col s12'>
+								<i class="material-icons prefix">account_circle</i>
+								<input  type='text' name='username' id='email' class="validate">
+								<label for='email'>nome utente</label>
+							</div>
+						</div>
+
+						<div class='row margin'>
+							<div class='input-field col s12'>
+								<i class="material-icons prefix">lock_outline</i>
+								<input class='validate' type='password' name='password' id='password' class="validate">
+								<label for='password'>password</label>
+							</div>
+						</div>
+						<div class="row">          
+				              <input type="checkbox" id="remember-me-s" name="remember-me">
+				              <label for="remember-me-s">Remember me</label>
+
+				        </div>
+						<center>
+							<div class='row'>
+								<button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
+							</div>
+						</center>
+					</form>
+					{%endif%}
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
