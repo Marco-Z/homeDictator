@@ -4,7 +4,11 @@ body{
 	background-repeat: repeat;
 }
 .card {
-	background-color: rgba(1,2,3,0);
+	background-color: rgba(0,0,0,.15);
+}
+table {
+	border-radius: 3px;
+    overflow: hidden;
 }
 table *{
 	color: white; 
@@ -20,7 +24,8 @@ table tr:hover{
 	float: right;
 }
 td{
-	padding: 0 !important;
+	padding: 1px 5px !important;
+	border-radius: initial;
 }
 .dafare{
 	padding: 0 5px !important;
@@ -64,4 +69,14 @@ td{
 
 ::-webkit-scrollbar {
     display: none;
+}
+.modal{
+    padding: 20px;
+    background: #222;
+}
+.modal input{
+	max-width: 85% !important;
+}
+.modal .input-field label:not(.label-icon).active {
+	transform: translateY(-50%) !important;
 }

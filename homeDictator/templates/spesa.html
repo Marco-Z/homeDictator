@@ -1,14 +1,7 @@
 <!doctype html>
 <head>
-	<title>homeDictator</title>
-	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
-    <link href="{{ url_for('static',filename='css/materialize.min.css')}}" rel="stylesheet" type="text/css">
-	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
-	<link href="{{ url_for('static',filename='css/material-icon.css')}}" rel="stylesheet">
-	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
-	<script src="{{ url_for('static',filename='js/materialize.min.js')}}"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="mobile-web-app-capable" content="yes">
+	<title>Lista della spesa</title>
+	{%include 'links.html'%}
 	<script>
 		 $(document).ready(function() {
 		$('select').material_select();
