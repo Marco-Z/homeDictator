@@ -44,7 +44,7 @@ def index(error=None):
 			error="Bisogna effettuare il login prima di continuare"
 			return render_template('login.html', error=error)
 		a = request.form['attivita']
-		mydb.insert(n,a,date.today())
+		mydb.insert(nome,a,date.today())
 	res = mydb.get_activities()
 	attivita = activity.get_activities()
 	lista_attivita = mydb.get_activities()
