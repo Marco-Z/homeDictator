@@ -210,3 +210,18 @@ def user_page():
 	except:
 		pass
 	return render_template('user.html',nome=nome)
+
+@app.route("/change-avatar",methods=['POST'])
+@login_required
+def update_avatar():
+	nome=mydb.get_user_by_id(current_user.get_id())[1]
+	try:
+		for f in request.files:
+			file = request.files[f]
+		print(file)
+		mydb.change_avatar(file, nome)
+	except:
+		print("%s ha fallito nel cambiare avatar"%nome)
+		return "Caricamento fallito"
+	print("%s ha cambiato avatar"%nome)
+	return "Caricamento riuscito"

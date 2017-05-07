@@ -3,6 +3,15 @@ body{
 	background-attachment: fixed;
 	background-repeat: repeat;
 }
+
+@media only screen and (min-width: 600px){
+
+	.flow-text {
+	    font-size: 1.36rem;
+	}
+
+}
+
 .card {
 	background-color: rgba(0,0,0,.15);
 }

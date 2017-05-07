@@ -2,6 +2,8 @@
 <head>
 	<title>{{nome}} - profilo</title>
 	{%include 'links.html'%}
+	<script src="{{ url_for('static',filename='js/dropzone.js')}}"></script>
+	<link href="{{ url_for('static',filename='css/dropzone.css')}}" rel="stylesheet" type="text/css">
 	<script>
 		$(document).ready(function() {
 			$('select').material_select();
@@ -29,8 +31,7 @@
 						<div class="col s8 m12 offset-s2 pull-m2">
 							<div class="collection grey-darken-3">
 					            <a href="/logout" class="btn-flat waves-effect waves-dark  lighten-5 collection-item"><i class="material-icons">exit_to_app</i> Esci</a>
-					            <div class="divider"></div>
-					            <a class="collection-item" href="#!">Cambia avatar</a>
+					            <a class="collection-item" href="#cambia-avatar">Cambia avatar</a>
 					            <a class="collection-item" href="#!">Cambia password</a>
 					            <a class="collection-item" href="#!">Fai danni</a>
 					        </div>
@@ -44,9 +45,55 @@
 					<div class="card-content white-text">
 					<p class="flow-text">One common flaw we've seen in many frameworks is a lack of support for truly responsive text. While elements on the page resize fluidly, text still resizes on a fixed basis. To ameliorate this problem, for text heavy pages, we've created a class that fluidly scales text size and line-height to optimize readability for the user. Line length stays between 45-80 characters and line height scales to be larger on smaller screens.
 
-To see Flow Text in action, slowly resize your browser and watch the size of this text body change! Use the button above to toggle off/on flow-text to see the difference!</p>
+						To see Flow Text in action, slowly resize your browser and watch the size of this text body change! Use the button above to toggle off/on flow-text to see the difference!</p>
 					</div>
 				</div>
+				<div class="card small" id="cambia-avatar">
+					<div class="card-content">
+					<span class="card-title white-text">Cambia avatar</span>
+					<div class="row">
+						<div class="col s12 center-align">
+						<script type="text/javascript">
+						$(function(){
+							Dropzone.options.myAwesomeDropzone = {
+								  method="POST",
+								  paramName: "file", // The name that will be used to transfer the file
+								  maxFilesize: 3,
+								  parallelUploads: 1,
+								  uploadMultiple: false,
+								  maxFiles:1,
+								  acceptedFiles: "image/jpeg,image/png,image/gif",
+								  addRemoveLinks: true,
+
+								   init: function() {
+								    this.on("thumbnail", function(file) {
+								      if (file.width > 650 || file.height > 650) {
+								        file.rejectDimensions()
+								      }
+								      else {
+								        file.acceptDimensions();
+								      }
+								    });
+								  },
+
+
+
+								  accept: function(file, done) {
+								    file.acceptDimensions = done;
+								    file.rejectDimensions = function() { done("Invalid dimension. Max 650x650"); };
+								  }
+								};
+							})
+														</script>
+						<form class="dropzone" id="my-awesome-dropzone" method="POST" action="/change-avatar" enctype="multipart/form-data">
+							<div class="fallback">
+							    <input name="file" type="file" multiple />
+							</div>
+						</form>
+						</div>
+						</div>
+						</div>
+					</div>
 			</div>
         </div>
     </div>
