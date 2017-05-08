@@ -26,7 +26,7 @@
 			<div class="col s12 m4">
 				<div class="card center-align">
 					<div class="card-content white-text center-align">
-						<img class="responsive-img center-align" src="/images/{{nome}}.jpg">
+						<img class="responsive-img center-align circle" src="/images/{{nome}}.jpg">
 						<div class="row">
 						<div class="col s8 m12 offset-s2 pull-m2">
 							<div class="collection grey-darken-3">
@@ -53,39 +53,39 @@
 					<span class="card-title white-text">Cambia avatar</span>
 					<div class="row">
 						<div class="col s12 center-align">
+						<form class="dropzone" id="my-awesome-dropzone" method="POST" action="/change-avatar" enctype="multipart/form-data">
 						<script type="text/javascript">
-						$(function(){
+
 							Dropzone.options.myAwesomeDropzone = {
-								  method="POST",
+								  method:"POST",
 								  paramName: "file", // The name that will be used to transfer the file
 								  maxFilesize: 3,
 								  parallelUploads: 1,
 								  uploadMultiple: false,
 								  maxFiles:1,
 								  acceptedFiles: "image/jpeg,image/png,image/gif",
-								  addRemoveLinks: true,
+								  addRemoveLinks: false,
+								  dictResponseError: 'Errore, controlla che il file rispetti i limiti!',
+								  dictFileTooBig:'File troppo grande',
+								  dictMaxFilesExceeded:'Ricarica la pagina per cambiare di nuovo avatar',
 
-								   init: function() {
-								    this.on("thumbnail", function(file) {
-								      if (file.width > 650 || file.height > 650) {
-								        file.rejectDimensions()
-								      }
-								      else {
-								        file.acceptDimensions();
-								      }
-								    });
-								  },
-
-
-
-								  accept: function(file, done) {
-								    file.acceptDimensions = done;
-								    file.rejectDimensions = function() { done("Invalid dimension. Max 650x650"); };
+								  init: function() {
+								  	 this.on("error", function(file,errormessage, xhr){
+								  	 	if (!file.accepted) {
+								  	 		setTimeout(function(){
+												this.removeFile(file);
+											}, 2000);
+								  	 		}
+								  	 	});
+								  	 this.on("success", function(file,errormessage, xhr){
+								  	 	location.reload();
+								  	 });
 								  }
-								};
-							})
-														</script>
-						<form class="dropzone" id="my-awesome-dropzone" method="POST" action="/change-avatar" enctype="multipart/form-data">
+							}
+							
+						</script>
+						<div class="dz-message" data-dz-message><span><b>Clicca qui</b>  o trascina un immagine per selezionare il nuovo avatar</span>
+						<span style="font-size: 70%;"><br>È consigliata un'immagine quadrata. Massimo 650x650px che non superi i 3MB</span></div>
 							<div class="fallback">
 							    <input name="file" type="file" multiple />
 							</div>

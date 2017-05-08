@@ -225,6 +225,7 @@ class db_manager(object):
 			return True
 		except Exception as e:
 			print("error while %s was changing avatar" %(nome) )
+			return False
 		else:
 			return False
 
