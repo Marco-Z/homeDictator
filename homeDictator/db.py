@@ -23,6 +23,13 @@ class db_manager(object):
 			"""
 		self.cursor.execute(create_command)
 
+		#initialize group table
+		self.cursor.execute("""
+					CREATE TABLE IF NOT EXISTs groups (
+					id integer PRIMARY KEY autoincrement,
+					nome text NOT NULL);
+						""")
+
 		# initialize users table
 		create_users = """
 			CREATE TABLE IF NOT EXISTS users ( 
@@ -31,7 +38,8 @@ class db_manager(object):
 			credito REAL DEFAULT 0, 
 			password TEXT DEFAULT "%s" , 
 			is_admin INTEGER DEFAULT 0,
-			avatar BLOB DEFAULT "%s" );
+			avatar BLOB DEFAULT "%s",
+			group_id INT, FOREIGN KEY(group_id) REFERENCES groups(id));
 			""" %(default_password,sqlite3.Binary(default_avatar))
 
 		self.cursor.execute(create_users)
@@ -70,8 +78,10 @@ class db_manager(object):
 		version =self.cursor.execute(sql).fetchone()[0]
 		if version == 0:
 			try:
+				self.connection.commit()
+				self.cursor.execute("begin transaction")
 				self.cursor.execute('ALTER TABLE users ADD COLUMN password TEXT DEFAULT "%s"'%(default_password))
-				self.cursor.execute('ALTER TABLE users ADD COLUMN is_admin INT DEFAULT 0;')
+				self.cursor.execute('ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0;')
 				self.cursor.execute('ALTER TABLE users ADD COLUMN avatar BLOB')
 				self.cursor.execute('UPDATE users SET avatar = (?)', [default_avatar])
 				sql="PRAGMA user_version=1"
@@ -79,7 +89,40 @@ class db_manager(object):
 				self.connection.commit()
 				print("\n","UPGRADE SUCCESFULLY TO DB VERSION %s"%(version),"\n")
 			except:
+				self.cursor.execute("rollback")
 				print("\n","FAILED TO UPGRADE DB TO VERSION 1.0","\n")
+
+		if version == 1:
+			try:
+				self.connection.commit()
+				self.cursor.execute("begin transaction")
+				self.cursor.execute("""
+					CREATE TABLE Groups (
+					id integer PRIMARY KEY autoincrement,
+					nome text NOT NULL);
+						""")	
+						#had to create new table to add new foreign key, so create a new one, copy the data and delete the old one			
+				self.cursor.execute("""
+					CREATE TABLE user_back ( 
+					id INTEGER PRIMARY KEY AUTOINCREMENT, 
+					nome TEXT NOT NULL UNIQUE, 
+					credito REAL DEFAULT 0, 
+					password TEXT DEFAULT "%s" , 
+					is_admin INTEGER DEFAULT 0,
+					avatar BLOB DEFAULT "%s",
+					group_id INT, FOREIGN KEY(group_id) REFERENCES groups(id));
+					""" %(default_password,sqlite3.Binary(default_avatar)))
+				self.cursor.execute("""insert into user_back (id,nome,credito,password,is_admin,avatar) 
+					select id,nome,credito,password,is_admin,avatar from users""")
+				self.cursor.execute("DROP TABLE users")
+				self.cursor.execute("ALTER TABLE user_back RENAME TO users")
+				sql="PRAGMA user_version=2"
+				version =self.cursor.execute(sql).fetchone()[0]
+				self.connection.commit()
+				print("\n","UPGRADE SUCCESFULLY TO DB VERSION %s"%(version),"\n")
+			except:
+				self.cursor.execute("rollback")
+				print("\n","FAILED TO UPGRADE DB TO VERSION 2","\n")
 
 	def reset(self):
 		delete_command = """

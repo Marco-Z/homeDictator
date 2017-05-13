@@ -1,4 +1,4 @@
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response, session, escape
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response, session, escape, json
 from homeDictator.db import db_manager
 from homeDictator.log import log
 from homeDictator.activity import activity
@@ -217,11 +217,17 @@ def update_avatar():
 	nome=mydb.get_user_by_id(current_user.get_id())[1]
 	try:
 		for f in request.files:
-			file = request.files[f]
-		print(file)
-		mydb.change_avatar(file, nome)
+			file = request.files[f]	
+			print(file)
+			ok=mydb.change_avatar(file, nome)
+			if not ok:
+				raise Exception('error')
+
 	except:
 		print("%s ha fallito nel cambiare avatar"%nome)
-		return "Caricamento fallito"
+		return json.dumps({'success':False,"status": "error",'msg': "Error,change file"}), 403, {'ContentType':'application/json'}
+
 	print("%s ha cambiato avatar"%nome)
-	return "Caricamento riuscito"
+	return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+

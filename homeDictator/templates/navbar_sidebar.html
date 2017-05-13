@@ -78,10 +78,31 @@
 
 		</script>
 		{%else%}
-
-		<li id="user-nav-button"><a href="/user"><img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive"></a>
-		<a href="/user"><span class="white-text " style="margin-right: 10px;"><b >{{nome}}</b></span></a></li>
+		<ul id='dropdownuserdata' class='dropdown-content white-text grey darken-3'>
+		    <li><a href="/user">Profilo</a></li>
+		    <li class="divider"></li>
+		    <li><a href="/logout"><i class="material-icons">exit_to_app</i> Log-out </a></li>
+		 </ul>
+		<li id="user-nav-button"><a href="/user"><!--<img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive"></a>
+		<!-- <a href="/user"><span class="white-text " style="margin-right: 10px;"><b >{{nome}}</b></span></a> -->
+		<a href="/user" class='dropdown-button white-text' id="dropdownuser" data-activates='dropdownuserdata'>
+		<img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive">
+		<b style="margin-right: 10px;">{{nome}}</b></a>
+		</li>
 	</ul>
+	<script type="text/javascript">
+				$('.dropdown-button').dropdown({
+				      constrainWidth: false, // Does not change width of dropdown to that of the activator
+				      hover: true, // Activate on hover
+				      gutter: 0, // Spacing from edge
+				      belowOrigin: true, // Displays dropdown below the button
+				      alignment: 'right', // Displays dropdown with edge aligned to the left of button
+				      stopPropagation: false // Stops event propagation
+				    }
+				  );
+		</script>
+
+
 
 	{% endif %}
 	<ul class="side-nav grey darken-3 white-text" id="mobile-demo">
