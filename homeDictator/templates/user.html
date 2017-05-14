@@ -26,7 +26,7 @@
 			<div class="col s12 m4">
 				<div class="card center-align">
 					<div class="card-content white-text center-align">
-						<img class="responsive-img center-align circle" src="/images/{{nome}}.jpg">
+						<img class="responsive-img center-align circle" id="userpage-img" src="/images/{{nome}}.jpg">
 						<div class="row">
 						<div class="col s8 m12 offset-s2 pull-m2">
 							<div class="collection grey-darken-3">
@@ -41,6 +41,24 @@
 				</div>
 			</div>
 			<div class="col s12 m8">
+			{%if group==None%}
+			<div class="card">
+				<span class="card-title">Novità !</span>
+					<div class="card-content white-text">
+					<p class="flow-text">Sono stati aggiunti i gruppi, ora tu e i tuoi coinquilini farete parte dello stesso gruppo. Tuttavia risulta che tu non sia assegnato a nessun gruppo, non c'è problema: scegline uno dalla lista o creane uno nuovo</p>
+					{%if guppi%}
+					<form action="#">
+						{%for gruppo in gruppi%}
+					    <p>
+					      <input name="group1" type="radio" id="test1" />
+					      <label for="test1">Red</label>
+					    </p>
+					    {%endfor%}
+					  </form>
+					  {%endif%}
+					</div>
+				</div>
+				{%endif%}
 				<div class="card">
 					<div class="card-content white-text">
 					<p class="flow-text">One common flaw we've seen in many frameworks is a lack of support for truly responsive text. While elements on the page resize fluidly, text still resizes on a fixed basis. To ameliorate this problem, for text heavy pages, we've created a class that fluidly scales text size and line-height to optimize readability for the user. Line length stays between 45-80 characters and line height scales to be larger on smaller screens.

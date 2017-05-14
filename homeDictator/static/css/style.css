@@ -96,3 +96,9 @@ td{
 #user-nav-button{
 	display: flex !important;
 }
+@media only screen and (max-width: 600px){
+#userpage-img{
+    max-width: 220px;
+    max-height: 2220px;
+
+}}

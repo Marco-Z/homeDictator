@@ -3,7 +3,8 @@ from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
 
 default_password="pbkdf2:sha256:50000$bS6FggcU$6a995088dbbd98a95a1f308cd26f6610deb835db613dcdc740ec06907b40a391"
-default_avatar= open('homeDictator/static/img/avatar.jpg','rb').read()
+default_avatar= open('homeDictator/static/img/avatar.jpg','rb').read() 
+
 
 class db_manager(object):
 
@@ -23,27 +24,16 @@ class db_manager(object):
 			"""
 		self.cursor.execute(create_command)
 
-		#initialize group table
-		self.cursor.execute("""
-					CREATE TABLE IF NOT EXISTs groups (
-					id integer PRIMARY KEY autoincrement,
-					nome text NOT NULL);
-						""")
-
 		# initialize users table
 		create_users = """
 			CREATE TABLE IF NOT EXISTS users ( 
 			id INTEGER PRIMARY KEY AUTOINCREMENT, 
 			nome TEXT NOT NULL UNIQUE, 
-			credito REAL DEFAULT 0, 
-			password TEXT DEFAULT "%s" , 
-			is_admin INTEGER DEFAULT 0,
-			avatar BLOB DEFAULT "%s",
-			group_id INT, FOREIGN KEY(group_id) REFERENCES groups(id));
-			""" %(default_password,sqlite3.Binary(default_avatar))
+			credito REAL DEFAULT 0 );
+			""" 
 
 		self.cursor.execute(create_users)
-		self.connection.commit()
+		self.connection.commit()##da rifare con un form di registrazione
 		if len(self.cursor.execute("SELECT * FROM users;").fetchall()) == 0:
 			self.cursor.execute('INSERT INTO users (nome) VALUES ("Marco")')
 			self.cursor.execute('INSERT INTO users (nome) VALUES ("Matteo")')
@@ -83,9 +73,8 @@ class db_manager(object):
 				self.cursor.execute('ALTER TABLE users ADD COLUMN password TEXT DEFAULT "%s"'%(default_password))
 				self.cursor.execute('ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0;')
 				self.cursor.execute('ALTER TABLE users ADD COLUMN avatar BLOB')
-				self.cursor.execute('UPDATE users SET avatar = (?)', [default_avatar])
-				sql="PRAGMA user_version=1"
-				version =self.cursor.execute(sql).fetchone()[0]
+				self.cursor.execute("PRAGMA user_version=1")
+				version =self.cursor.execute("PRAGMA user_version").fetchone()[0]
 				self.connection.commit()
 				print("\n","UPGRADE SUCCESFULLY TO DB VERSION %s"%(version),"\n")
 			except:
@@ -97,32 +86,66 @@ class db_manager(object):
 				self.connection.commit()
 				self.cursor.execute("begin transaction")
 				self.cursor.execute("""
-					CREATE TABLE Groups (
+					CREATE TABLE IF NOT EXISTS groups (
 					id integer PRIMARY KEY autoincrement,
 					nome text NOT NULL);
 						""")	
 						#had to create new table to add new foreign key, so create a new one, copy the data and delete the old one			
 				self.cursor.execute("""
-					CREATE TABLE user_back ( 
+					CREATE TABLE IF NOT EXISTS user_back ( 
 					id INTEGER PRIMARY KEY AUTOINCREMENT, 
 					nome TEXT NOT NULL UNIQUE, 
 					credito REAL DEFAULT 0, 
 					password TEXT DEFAULT "%s" , 
 					is_admin INTEGER DEFAULT 0,
-					avatar BLOB DEFAULT "%s",
-					group_id INT, FOREIGN KEY(group_id) REFERENCES groups(id));
-					""" %(default_password,sqlite3.Binary(default_avatar)))
+					avatar BLOB ,
+					group_id INT REFERENCES groups(id));
+					""" %(default_password))
 				self.cursor.execute("""insert into user_back (id,nome,credito,password,is_admin,avatar) 
 					select id,nome,credito,password,is_admin,avatar from users""")
 				self.cursor.execute("DROP TABLE users")
 				self.cursor.execute("ALTER TABLE user_back RENAME TO users")
-				sql="PRAGMA user_version=2"
-				version =self.cursor.execute(sql).fetchone()[0]
+				self.cursor.execute("PRAGMA user_version=2")
+				version =self.cursor.execute("PRAGMA user_version").fetchone()[0]
 				self.connection.commit()
 				print("\n","UPGRADE SUCCESFULLY TO DB VERSION %s"%(version),"\n")
 			except:
 				self.cursor.execute("rollback")
 				print("\n","FAILED TO UPGRADE DB TO VERSION 2","\n")
+
+		if version == 2:  #currently it destroy the old avatar (not so crucial)
+			try:
+				self.connection.commit()
+				self.cursor.execute("begin transaction")
+				self.cursor.execute("""
+					CREATE TABLE IF NOT EXISTS preferences(
+					id integer PRIMARY KEY references users(id) not null,
+					avatar_img BLOB,
+					background_img BLOB,
+					primary_color Text,
+					secondary_color text);
+						""")	
+						#had to create new table to add new foreign key, so create a new one, copy the data and delete the old one			
+				self.cursor.execute("""
+					CREATE TABLE IF NOT EXISTS user_back ( 
+					id INTEGER PRIMARY KEY AUTOINCREMENT, 
+					nome TEXT NOT NULL UNIQUE, 
+					credito REAL DEFAULT 0, 
+					password TEXT DEFAULT "%s" , 
+					is_admin INTEGER DEFAULT 0,
+					group_id INT REFERENCES groups(id));
+					""" %(default_password))
+				self.cursor.execute("""insert into user_back (id,nome,credito,password,is_admin,group_id) 
+					select id,nome,credito,password,is_admin,group_id from users""")
+				self.cursor.execute("DROP TABLE users")
+				self.cursor.execute("ALTER TABLE user_back RENAME TO users")
+				self.cursor.execute("PRAGMA user_version=3")
+				version =self.cursor.execute("PRAGMA user_version").fetchone()[0]
+				self.connection.commit()
+				print("\n","UPGRADE SUCCESFULLY TO DB VERSION %s"%(version),"\n")
+			except:
+				self.cursor.execute("rollback")
+				print("\n","FAILED TO UPGRADE DB TO VERSION 3","\n")
 
 	def reset(self):
 		delete_command = """
@@ -258,24 +281,31 @@ class db_manager(object):
 				return res
 		return None
 
-	def change_avatar(self, image, nome):
+	def change_avatar(self, image, a_id):
 		blob=None
 		try:
 			blob=image.read()
-			sql="update users set avatar = ? where nome= ? "
-			res=self.cursor.execute(sql, [sqlite3.Binary(blob),nome])
+			#preferences id  must be the same id as users!
+			sql="update preferences set avatar_img=? where id=? "
+			res=self.cursor.execute( sql,[sqlite3.Binary(blob),a_id]).rowcount
+			if res==0:
+				sql="insert into preferences (id,avatar_img) values (?,?) "
+				self.cursor.execute (sql,[sqlite3.Binary(blob),a_id])
 			self.connection.commit()
 			return True
 		except Exception as e:
-			print("error while %s was changing avatar" %(nome) )
+			print("error while %s was changing avatar" %(a_id) )
 			return False
 		else:
 			return False
 
 	def get_avatar_from_name(self,nome):
 		try:
-			sql="select avatar from users where nome = ?"
-			res=self.cursor.execute(sql, [nome]).fetchone()[0]
+			sql="select id from users where nome=? "
+			pref_id=self.cursor.execute( sql,[nome]).fetchone()[0]
+
+			sql="select avatar_img from preferences where id = ?"
+			res=self.cursor.execute(sql, [pref_id]).fetchone()[0]
 			if res:
 				return res
 			else:
@@ -283,3 +313,69 @@ class db_manager(object):
 		except :
 			print("error while retriving %s's avatar" %(nome) )
 			return default_avatar
+
+	def is_useradmin(self,id):
+		try:
+			sql="select is_admin from users where id = ?"
+			res=self.cursor.execute(sql, [id]).fetchone()[0]
+			if res==0:
+				return False
+			else:
+				return True
+		except :
+			return False
+
+	def get_userGroupId(self,userid):
+		try:
+			sql="select group_id from users where id = ?"
+			res=self.cursor.execute(sql, [userid]).fetchone()[0]
+			return res
+		except :
+			return None
+	def get_GroupName(self,userid):
+		try:
+			sql="select nome from groups where id = ?"
+			res=self.cursor.execute(sql, [group_id]).fetchone()[0]
+			return res
+		except :
+			return None
+
+	def getGroupsAndComponents(self,group_id):#non ancora usato
+		#return a dict of touple as: key =groupid value={(groupname,[componentsname..])}
+		try:
+			groups={}
+			sql="select groups.id,groups.nome,users.nome from users join groups on group_id=groups.id "
+			res=self.cursor.execute(sql).fetchAll()
+			for row in res:
+				group[row[0]]=(row[1],group[row[0]][1]+[row[3]])
+			return res
+		except :
+			return None
+
+	def get_GroupComponentsname(self, group_id):
+		try:
+			components=[]
+			sql="select users.nome from users where group_id=?"
+			res=self.cursor.execute(sql, [group_id]).fetchAll()
+			for row in res:
+				components.append(row[0])
+			return components
+		except :
+			return None
+	def add_Group(self, nome):
+		try:
+			sql="insert into groups (nome) values ?"
+			res=self.cursor.execute(sql, [nome])
+			self.connection.commit()
+			return True
+		except Exception as e:
+			return False
+
+	def set_UserGroup(self, user_id,group_id):
+		try:
+			sql="update users set group_id = ? where id=?"
+			res=self.cursor.execute(sql, [group_id,user_id])
+			self.connection.commit()
+			return True
+		except Exception as e:
+			return False
