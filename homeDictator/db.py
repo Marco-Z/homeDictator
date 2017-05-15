@@ -113,39 +113,7 @@ class db_manager(object):
 				self.cursor.execute("rollback")
 				print("\n","FAILED TO UPGRADE DB TO VERSION 2","\n")
 
-		if version == 2:  #currently it destroy the old avatar (not so crucial)
-			try:
-				self.connection.commit()
-				self.cursor.execute("begin transaction")
-				self.cursor.execute("""
-					CREATE TABLE IF NOT EXISTS preferences(
-					id integer PRIMARY KEY references users(id) not null,
-					avatar_img BLOB,
-					background_img BLOB,
-					primary_color Text,
-					secondary_color text);
-						""")	
-						#had to create new table to add new foreign key, so create a new one, copy the data and delete the old one			
-				self.cursor.execute("""
-					CREATE TABLE IF NOT EXISTS user_back ( 
-					id INTEGER PRIMARY KEY AUTOINCREMENT, 
-					nome TEXT NOT NULL UNIQUE, 
-					credito REAL DEFAULT 0, 
-					password TEXT DEFAULT "%s" , 
-					is_admin INTEGER DEFAULT 0,
-					group_id INT REFERENCES groups(id));
-					""" %(default_password))
-				self.cursor.execute("""insert into user_back (id,nome,credito,password,is_admin,group_id) 
-					select id,nome,credito,password,is_admin,group_id from users""")
-				self.cursor.execute("DROP TABLE users")
-				self.cursor.execute("ALTER TABLE user_back RENAME TO users")
-				self.cursor.execute("PRAGMA user_version=3")
-				version =self.cursor.execute("PRAGMA user_version").fetchone()[0]
-				self.connection.commit()
-				print("\n","UPGRADE SUCCESFULLY TO DB VERSION %s"%(version),"\n")
-			except:
-				self.cursor.execute("rollback")
-				print("\n","FAILED TO UPGRADE DB TO VERSION 3","\n")
+		
 
 	def reset(self):
 		delete_command = """
@@ -285,12 +253,8 @@ class db_manager(object):
 		blob=None
 		try:
 			blob=image.read()
-			#preferences id  must be the same id as users!
-			sql="update preferences set avatar_img=? where id=? "
-			res=self.cursor.execute( sql,[sqlite3.Binary(blob),a_id]).rowcount
-			if res==0:
-				sql="insert into preferences (id,avatar_img) values (?,?) "
-				self.cursor.execute (sql,[sqlite3.Binary(blob),a_id])
+			sql="update users set avatar = ? where id = ? " 
+			res=self.cursor.execute(sql, [sqlite3.Binary(blob),a_id]) 
 			self.connection.commit()
 			return True
 		except Exception as e:
@@ -301,11 +265,8 @@ class db_manager(object):
 
 	def get_avatar_from_name(self,nome):
 		try:
-			sql="select id from users where nome=? "
-			pref_id=self.cursor.execute( sql,[nome]).fetchone()[0]
-
-			sql="select avatar_img from preferences where id = ?"
-			res=self.cursor.execute(sql, [pref_id]).fetchone()[0]
+			sql="select avatar from users where nome = ?" 
+			res=self.cursor.execute(sql, [nome]).fetchone()[0] 
 			if res:
 				return res
 			else:

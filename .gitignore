@@ -60,3 +60,7 @@ target/
 *.db
 spesa.txt
 
+
+homeDictator/static/js/notifications\.js
+
+homeDictator/templates/header\.html
