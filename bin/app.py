@@ -94,8 +94,6 @@ def cancella():
 def paga():
 	nome=""
 	try:
-		nome=mydb.get_user_by_id(current_user.get_id())[1]
-		print(nome)
 		nome = request.form['nome']
 		importo = float(request.form['importo'])
 		desc = request.form['descrizione']

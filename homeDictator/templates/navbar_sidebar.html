@@ -14,7 +14,7 @@
 	<nav class="grey darken-3">
 		<div class="nav-wrapper">
 			<a href="/" class="brand-logo center"><i class="material-icons left" id="home-dict">home</i>Dictator</a>
-			<a href="#" data-activates="mobile-demo" class="button-collapse">
+			<a href="#" data-activates="mobile-demo" class="button-collapse" id="nav-menu">
 				<i class="material-icons">menu</i>
 			</a>
 			<ul id="nav-mobile" class="left hide-on-med-and-down">
@@ -29,10 +29,10 @@
 			</ul>
 			<ul id="nav-mobile" class="right hide-on-med-and-down white-text">
 				{% if not nome %}
-				<li><a href="#modal1"><i class="material-icons left">perm_identity</i>Login</a></li>
+				<li><a href="#modallogin"><i class="material-icons left">perm_identity</i>Login</a></li>
 			</ul>
 			<!-- Modal Structure -->
-			<div id="modal1" class="modal">
+			<div id="modallogin" class="modal">
 				<span class="card-title">Login</span>
 				{% if error %}
 				<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
@@ -73,7 +73,7 @@
 			<script type="text/javascript">
 				$(document).ready(function(){
 			    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-			    $('.modal').modal();
+			    $('#modallogin').modal();
 			});
 
 		</script>
