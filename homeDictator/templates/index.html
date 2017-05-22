@@ -136,7 +136,7 @@
 </div>
 {%else%}
 <div class="fixed-action-btn" id="addfloat">
-	<a class="btn-floating btn-large blue" onclick="Materialize.toast('Devi fare il login per usare questa funzione",2000,"blue")'>
+	<a class="btn-floating btn-large blue" onclick='Materialize.toast("Devi fare il login per usare questa funzione",2000,"blue")'>
 		<i class="large material-icons">mode_edit</i>
 	</a>
 </div>
@@ -144,11 +144,11 @@
 
 <script type="text/javascript">
 function tap_mobile(){
-	mobile=(window.innerWidth
+	mobile_d=(window.innerWidth
 	|| document.documentElement.clientWidth
 	|| document.body.clientWidth)<993;
 
-	if(!mobile){
+	if(!mobile_d){
 		$('#tap-user').tapTarget('open');
 	}
 	else{$('#tap-nav').tapTarget('open');}
@@ -219,9 +219,9 @@ function tap_mobile(){
 			<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
 		</form>
 	 </div>
-	 <div id="modalactivity" class="modal white-text">
+	 <div id="modalactivity" class="modal white-text center-align">
 	 	<span class="title">Aggiungi un attività che hai svolto</span>
-	 	<form method="POST" action="/" onsubmit="return validateactivity()" name="activity">
+	 	<form method="POST" action="/" onsubmit="return validateactivity()" name="activity" id="addform" >
 	 		<div class="input-field">
 	 		</div>
 	 		<select name="attivita">

@@ -102,3 +102,6 @@ td{
     max-height: 2220px;
 
 }}
+#addform {
+height: 330px !important;
+}
