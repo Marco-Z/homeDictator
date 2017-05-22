@@ -8,7 +8,29 @@
 			$('.button-collapse').sideNav();
 			$('#dropnav').dropdown({ hover: true, belowOrigin: false ,constrainWidth: false});
 			$('#dropbar').dropdown({ hover: false, belowOrigin: false });
+			$('.chips-autocomplete').material_chip({
+				data: [
+					{% for nome in nomi %}
+						{ tag: '{{ nome[0] }}',},
+					{%endfor%}
+						{tag: '',}],
+
+				autocompleteOptions: {
+					data: {
+						{% for nome in nomi %}
+						'{{ nome[0] }}'  : null,
+						{%endfor%}
+						'': null,
+					},
+					limit: Infinity,
+					minLength: 1
+				}
+			});
+
 		});
+		//for (var i = 0; i < ($('.chips-autocomplete').material_chip('data')).length; i++) {
+  		// console.log($('.chips-autocomplete').material_chip('data')[i]['tag'])
+		//}
 	</script>
 </head>
 <body>
@@ -22,129 +44,220 @@
 				</div>	
 			</div>
 		</div>
-		{%endif%}
-		<div class="row">
-			
-			<div class="col s12 m6">
-				{%if nome %}
-				<div class="card">
-					<div class="card-content white-text">
-						<form method="POST" action="/">
-							<div class="input-field">
-							</div>
-							<select name="attivita">
-								<option value="" disabled selected>Attività</option>
-								{% for a in attivita %}
-								<option value="{{ a }}">{{ a }}</option>
-								{% endfor %}
-							</select>
-							<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
-						</form>
-					</div>
-				</div>
-				{% endif %}
-				<div class="card">
-					<div class="card-content white-text">
-						<canvas id="myChart"></canvas>
-						<script>
-							var ctx = document.getElementById("myChart");
-							var myChart = new Chart(ctx, {
-								maintainAspectRatio: false,
-								type: 'bar',
-								data: {
-									labels: [   {% for entry in p.punteggi %}
-									'{{ entry }}',
-									{% endfor %}
-									],
-									fontColor: '#fff',
-									datasets: [{
-										data: [ {% for entry in p.punteggi %}
-										{{ p.punteggi[entry] }},
-										{% endfor %}
-										],
-										backgroundColor: '#2196F3'
-									}]
-								},
-								options: {
-									scales: {
-										yAxes: [{
-											ticks: {
-												beginAtZero:true
-											}
-										}]
-									},
-									legend: {
-										display: false,
-									}
-								}
-							});
-						</script>
-					</div>
-				</div>
-			</div>
-			<div class="col s12 m6">
+	</div>
+	{%endif%}
+	<div class="row">
+		<div class="col s12 m6">
 			<div class="card">
 				<div class="card-content white-text">
-					<form method="POST" action="/paga">
-						<div class="col s6 m6">
-							<div class="input-field">
-								<select name="nome">
-									<option value="" disabled selected>Creditore</option>
-									{% for nome in nomi %}
-									<option value="{{ nome[0] }}">{{ nome[0] }}</option>
+					<canvas id="myChart"></canvas>
+					<script>
+						var ctx = document.getElementById("myChart");
+						var myChart = new Chart(ctx, {
+							maintainAspectRatio: false,
+							type: 'bar',
+							data: {
+								labels: [   {% for entry in p.punteggi %}
+								'{{ entry }}',
+								{% endfor %}
+								],
+								fontColor: '#fff',
+								datasets: [{
+									data: [ {% for entry in p.punteggi %}
+									{{ p.punteggi[entry] }},
 									{% endfor %}
-								</select>
-							</div>
-							<div class="input-field">
-								<label>Importo €</label>
-								<input type="number" name="importo" step="0.01" min="0">
-							</div>
-							<div class="input-field">
-								<label>Descrizione</label>
-								<input type="text" name="descrizione">
-							</div>
-						</div>
-						<div class="col s6 m6">
-							<div class="input-field">
-								<table>
-									<tbody>
-										{% for nome in nomi %}
-										<tr>
-											<td>{{ nome[0] }}</td>
-											<td><input type="number" name="{{ nome[0] }}" value="1" min="0"></td>
-										</tr>
-										{% endfor %}
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
-					</form>
+									],
+									backgroundColor: '#2196F3'
+								}]
+							},
+							options: {
+								scales: {
+									yAxes: [{
+										ticks: {
+											beginAtZero:true
+										}
+									}]
+								},
+								legend: {
+									display: false,
+								}
+							}
+						});
+					</script>
 				</div>
 			</div>
-				<div class="card">
-					<div class="card-content white-text">
-						<table>
-							<tbody>
-								{% for nome in nomi %}
-								<tr class="
-								{% if(nome[1] < 0) %}
-								{{ 'red darken-4' }}
-								{% endif %}
-								{% if(nome[1] > 0) %}
-								{{ 'green darken-4' }}
-								{% endif %}
-								">
+		</div>
+		<div class="col s12 m6">
+			<div class="card">
+				<div class="card-content white-text">
+					<table>
+						<tbody>
+							{% for nome in nomi %}
+							<tr class="
+							{% if(nome[1] < 0) %}
+							{{ 'red darken-2' }}
+							{% endif %}
+							{% if(nome[1] > 0) %}
+							{{ 'green darken-2' }}
+							{% endif %}
+							">
+							<td>{{ nome[0] }}</td>
+							<td id="{{nome[0]}}td">{{ "{0:.2f}".format(nome[1]) }} €</td>
+							</tr>
+							<script type="text/javascript">
+								$(document).ready(function() {
+									var options = {
+									  useEasing : true, 
+									  useGrouping : false, 
+									  separator : ',', 
+									  decimal : '.', 
+									  suffix : '€'
+									};
+									var demo = new CountUp("{{nome[0]}}td", 0, {{ "{0:.2f}".format(nome[1]) }}, 2, 1.7, options);
+									demo.start();
+								});
+							</script>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div> 
+{%if nome%}
+<div class="fixed-action-btn" id="addfloat">
+	<a class="btn-floating btn-large blue">
+		<i class="large material-icons">mode_edit</i>
+	</a>
+	<ul>
+	<li><a class="btn-floating red tooltipped" data-position="left" data-delay="20" data-tooltip="Activity" data-target="modalactivity"><i class="material-icons">insert_chart</i></a></li>
+		<li><a class="btn-floating yellow darken-1 tooltipped" data-position="left" data-delay="20" data-tooltip="Money" data-target="modalpaga"><i class="material-icons">attach_money</i></a></li>
+	</ul>
+</div>
+{%else%}
+<div class="fixed-action-btn" id="addfloat">
+	<a class="btn-floating btn-large blue" onclick='Materialize.toast("Devi fare il login per usare questa funzione",2000,"blue")'>
+		<i class="large material-icons">mode_edit</i>
+	</a>
+</div>
+{%endif%}
+
+<script type="text/javascript">
+function tap_mobile(){
+	mobile_d=(window.innerWidth
+	|| document.documentElement.clientWidth
+	|| document.body.clientWidth)<993;
+
+	if(!mobile_d){
+		$('#tap-user').tapTarget('open');
+	}
+	else{$('#tap-nav').tapTarget('open');}
+}
+</script>
+	<div class="tap-target blue" data-activates="addfloat" id="tap-add" onclick=" tap_mobile()">
+	    <div class="tap-target-content white-text">
+	      <h5>Ciao, sei nuovo?</h5>
+	      <p>Premi questo bottone per aggiungere un attività che hai fatto, oppure aggiungere un conto da dividere con altri</p>
+	      <p>Premi in quest'area per continuare questo breve tour, altrove per terminarlo</p>
+	    </div>
+  	</div>
+	 <div class="tap-target blue" data-activates="dropdownuser" id="tap-user"  onclick="$('#tap-nav').tapTarget('open');">
+	    <div class="tap-target-content white-text">
+	      <h5>Questo è il tuo avatar</h5>
+	      <p>Premi qui per fare il login se non lo hai già fatto, altrimenti accedi al tuo profilo</p>
+	    </div>
+	 </div>
+	 <div class="tap-target blue" data-activates="nav-menu" id="tap-nav">
+	    <div class="tap-target-content white-text">
+	      <h5>Qui è il menù</h5>
+	      <p>Un click qui, o uno swipe da sinistra da mobile e potrai accedere ai comandi principali.<br><br>Questo è tutto buona navigazione</p>
+	    </div>
+	 </div>
+	 <div id ="modalpaga" class = "modal white-text">
+		<form method="POST" action="/paga" onsubmit="return validatepaga()" name="pagaform" id="pagaform">
+			<div class="col s6 m6 white-text">
+				<div class="input-field">
+					<select name="nome" class="validate">
+						<option value="" disabled selected>Creditore</option>
+						{% for nome in nomi %}
+						<option value="{{ nome[0] }}">{{ nome[0] }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="input-field validate">
+					<label>Importo €</label>
+					<input type="number" name="importo" step="0.01" min="0">
+				</div>
+
+				<label>Descrizione:</label>{%if False%}
+				<div class="input-field white-text">
+
+					<div class="chips chips-autocomplete" data-index="0" data-initialized="true">
+						<input type="text" name="descrizione" class="input" type="text">
+						<ul class="autocomplete-content dropdown-content"></ul>
+					</div>
+				</div>{%endif%}
+				<div class="input-field">
+					<label>Descrizione</label>
+					<input type="text" name="descrizione">
+				</div>
+			</div>
+			<div class="col s6 m6">
+				<div class="input-field">
+					<table>
+						<tbody>
+							{% for nome in nomi %}
+							<tr>
 								<td>{{ nome[0] }}</td>
-								<td>{{ "{0:.2f}".format(nome[1]) }} €</td>
+								<td><input type="number" name="{{ nome[0] }}" value="1" min="0"></td>
 							</tr>
 							{% endfor %}
 						</tbody>
 					</table>
 				</div>
 			</div>
-
-		</div>
-	</div>
-</div>
+			<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
+		</form>
+	 </div>
+	 <div id="modalactivity" class="modal white-text center-align">
+	 	<span class="title">Aggiungi un attività che hai svolto</span>
+	 	<form method="POST" action="/" onsubmit="return validateactivity()" name="activity" id="addform" >
+	 		<div class="input-field">
+	 		</div>
+	 		<select name="attivita">
+	 			<option value="" disabled selected>Attività</option>
+	 			{% for a in attivita %}
+	 			<option value="{{ a }}">{{ a }}</option>
+	 			{% endfor %}
+	 		</select>
+	 		<button type="submit" class="waves-effect waves-light btn blue">Aggiungi</button>
+	 	</form>
+	 </div>
+			<script type="text/javascript">
+				$(document).ready(function(){
+			    $('#modalactivity').modal();
+			    $('#modalpaga').modal();
+			});
+				function validateactivity() {
+					var x = document.forms["activity"]["attivita"].value;
+					if (x == "") {
+						Materialize.toast("Seleziona un'attività, non puoi lasciare il campo vuoto!",2000,'red');
+						return false;
+					}
+					return true;
+				}
+				function validatepaga() {
+					var creditore = document.forms["pagaform"]["nome"].value;
+					var importo =  document.forms["pagaform"]["importo"].value;
+					if (creditore == ""  ) {
+						Materialize.toast("Seleziona un creditore, non puoi lasciare il campo vuoto!",2000,'red');
+						return false;
+					}
+					if (importo="") {
+						Materialize.toast("Seleziona un importo, non puoi lasciare il campo vuoto!",2000,'red');
+						return false;
+					}
+					return true;
+				}		
+		</script>
 </body>
