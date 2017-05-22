@@ -14,11 +14,11 @@
 	<nav class="grey darken-3">
 		<div class="nav-wrapper">
 			<a href="/" class="brand-logo center"><i class="material-icons left" id="home-dict">home</i>Dictator</a>
-			<a href="#" data-activates="mobile-demo" class="button-collapse">
+			<a href="#" data-activates="mobile-demo" class="button-collapse" id="nav-menu">
 				<i class="material-icons">menu</i>
 			</a>
 			<ul id="nav-mobile" class="left hide-on-med-and-down">
-				<li><a href="/cancella"><i class="material-icons left">delete_sweep</i></a></li>
+				<li><a href="/cancella"><i class="material-icons" title="Lista attività">delete_sweep</i></a></li>
 				<li><a href="/spesa"><i class="material-icons" title="Spesa">shopping_cart</i></a></li>
 				<li><a href="/lista_spese"><i class="material-icons" title="Lista movimenti">attach_money</i></a></li>
 				{% if todo|length > 0%}
@@ -28,48 +28,117 @@
 
 			</ul>
 			<ul id="nav-mobile" class="right hide-on-med-and-down white-text">
-			{% if not nome %}
-			<li><a href="/login"><i class="material-icons left">perm_identity</i>Login</a></li>
-			</ul>
-			{%else%}
-
-			<li><a href="/user"><img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive"></a></li>
-			<li><a href="/user"><span class="white-text " style="margin-right: 10px;"><b >{{nome}}</b></span></a></li>
-			</ul>
-
-			{% endif %}
-			<ul class="side-nav grey darken-3 white-text" id="mobile-demo">
-				<li class="white-text"><div class="userView">
-					<div class="background">
-						<img src="{{ url_for('static',filename='img/low-poly.jpg')}}">
-					</div>
-						{% if nome %}
-						<a href="/user"><img class='circle' src="/images/{{nome}}.jpg"></a>
-						<a href="/user">{{nome}}</span></a>
-						{% else %}
-						<a href="/login"><img class='circle' src="{{ url_for('static',filename='img/avatar.jpg')}}" ></a>
-						{% endif %}
-					</div></li>
-				<li ><a href="/" class="white-text"><i class="material-icons left white-text">home</i>Home</a></li>
 				{% if not nome %}
-				<li><a href="/login" class="white-text"><i class="material-icons left white-text">perm_identity</i>Login</a></li>
-				{%else%}
-				<li><a href="/user" class="white-text"><i class="material-icons left white-text">perm_identity</i>Account</a></li>
-				{%endif%}
-				<li class="divider"></li>
-				<li><a href="/cancella" class="white-text"><i class="material-icons left white-text">delete_sweep</i>Lista attività</a></li>
-				<li><a href="/spesa" class="white-text"><i class="material-icons white-text" title="Spesa">shopping_cart</i>Lista della spesa</a></li>
-				<li><a href="/lista_spese" class="white-text"><i class="material-icons white-text" title="Lista movimenti">attach_money</i>Gestione soldi</a></li>
-				{% if todo|length > 0%}
-				<!-- Dropdown Trigger -->
-				<li><a class="dropdown-button red white-text" href="#!" id="dropbar" data-activates="dropdownside">{{ todo|length }} da fare<i class="material-icons right white-text">arrow_drop_down</i></a></li>					
-				{% endif %}
-				{%if nome%}
-				<li class="divider"></li>
-				<li><a href="/lista_spese" class="white-text"><i class="material-icons white-text" title="Lista movimenti">exit_to_app</i>Logout</a>
-				{%endif%}
-
-				
+				<li><a href="#modallogin" id="dropdownuser"><i class="material-icons left">perm_identity</i>Login</a></li>
 			</ul>
-		</div>
-	</nav>
+			<!-- Modal Structure -->
+			<div id="modallogin" class="modal">
+				<span class="card-title">Login</span>
+				{% if error %}
+				<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
+				{% else %}
+				{% if wrong %}
+				<span class="red-text"><strong>Errore:</strong> {{ wrong }}</span>
+				{%endif%}
+				<form class="login-form" method="post" action="/login">
+					<div class='row margin'>
+						<div class='input-field col s12'>
+							<i class="material-icons prefix">account_circle</i>
+							<input  type='text' name='username' id='email' class="validate">
+							<label for='email'>nome utente</label>
+						</div>
+					</div>
+
+					<div class='row margin'>
+						<div class='input-field col s12'>
+							<i class="material-icons prefix">lock_outline</i>
+							<input class='validate' type='password' name='password' id='password' class="validate">
+							<label for='password'>password</label>
+						</div>
+					</div>
+					<div class="row">          
+						<div class="input-field col s12 m12 l12  login-text">
+							<input type="checkbox" id="remember-me" name="remember-me">
+							<label for="remember-me">Ricordami</label>
+						</div>
+					</div>
+					<center>
+						<div class='row'>
+							<button type='submit' name='btn_login' class='btn btn-large waves-effect blue'>Login</button>
+						</div>
+					</center>
+				</form>
+				{%endif%}
+			</div>
+			<script type="text/javascript">
+				$(document).ready(function(){
+			    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+			    $('#modallogin').modal();
+			});
+
+		</script>
+		{%else%}
+		<ul id='dropdownuserdata' class='dropdown-content white-text grey darken-3'>
+		    <li><a href="/user">Profilo</a></li>
+		    <li class="divider"></li>
+		    <li><a href="/logout"><i class="material-icons">exit_to_app</i> Log-out </a></li>
+		 </ul>
+		<li id="user-nav-button"><!--<img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive"></a>
+		<!-- <a href="/user"><span class="white-text " style="margin-right: 10px;"><b >{{nome}}</b></span></a> -->
+		<a href="/user" class='dropdown-button white-text' id="dropdownuser" data-activates='dropdownuserdata'>
+		<img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive">
+		<b style="margin-right: 10px;">{{nome}}</b></a>
+		</li>
+	</ul>
+	<script type="text/javascript">
+				$('.dropdown-button').dropdown({
+					inDuration: 225,
+					outDuration: 200,
+				      constrainWidth: false, // Does not change width of dropdown to that of the activator
+				      hover: true, // Activate on hover
+				      gutter: 0, // Spacing from edge
+				      belowOrigin: true, // Displays dropdown below the button
+				      alignment: 'right', // Displays dropdown with edge aligned to the left of button
+				      stopPropagation: false // Stops event propagation
+				    }
+				  );
+		</script>
+
+
+
+	{% endif %}
+	<ul class="side-nav grey darken-3 white-text" id="mobile-demo">
+		<li class="white-text"><div class="userView">
+			<div class="background">
+				<img src="{{ url_for('static',filename='img/low-poly.jpg')}}">
+			</div>
+			{% if nome %}
+			<a href="/user"><img class='circle' src="/images/{{nome}}.jpg"></a>
+			<a href="/user">{{nome}}</span></a>
+			{% else %}
+			<a href="/login"><img class='circle' src="{{ url_for('static',filename='img/avatar.jpg')}}" ></a>
+			{% endif %}
+		</div></li>
+		<li ><a href="/" class="white-text"><i class="material-icons left white-text">home</i>Home</a></li>
+		{% if not nome %}
+		<li><a href="/login" class="white-text"><i class="material-icons left white-text">perm_identity</i>Login</a></li>
+		{%else%}
+		<li><a href="/user" class="white-text"><i class="material-icons left white-text">perm_identity</i>Account</a></li>
+		{%endif%}
+		<li class="divider"></li>
+		<li><a href="/cancella" class="white-text"><i class="material-icons left white-text">delete_sweep</i>Lista attività</a></li>
+		<li><a href="/spesa" class="white-text"><i class="material-icons white-text" title="Spesa">shopping_cart</i>Lista della spesa</a></li>
+		<li><a href="/lista_spese" class="white-text"><i class="material-icons white-text" title="Lista movimenti">attach_money</i>Gestione soldi</a></li>
+		{% if todo|length > 0%}
+		<!-- Dropdown Trigger -->
+		<li><a class="dropdown-button red white-text" href="#!" id="dropbar" data-activates="dropdownside">{{ todo|length }} da fare<i class="material-icons right white-text">arrow_drop_down</i></a></li>					
+		{% endif %}
+		{%if nome%}
+		<li class="divider"></li>
+		<li><a href="/logout" class="white-text"><i class="material-icons white-text">exit_to_app</i>Logout</a>
+			{%endif%}
+
+
+		</ul>
+	</div>
+</nav>

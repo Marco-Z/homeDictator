@@ -1,62 +1,121 @@
 <!doctype html>
 <head>
-	<title>homeDictator</title>
-	<link rel='shortcut icon' href="{{ url_for('static',filename='img/favicon.ico')}}" type="image/x-icon">
-    <link href="{{ url_for('static',filename='css/materialize.min.css')}}" rel="stylesheet" type="text/css">
-	<link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet" type="text/css">
-	<link href="{{ url_for('static',filename='css/material-icon.css')}}" rel="stylesheet">
-	<script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
-	<script type="text/javascript" src="{{ url_for('static',filename='js/Chart.min.js')}}"></script>
-	<script src="{{ url_for('static',filename='js/materialize.js')}}"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#000000">
+	<title>{{nome}} - profilo</title>
+	{%include 'links.html'%}
+	<script src="{{ url_for('static',filename='js/dropzone.js')}}"></script>
+	<link href="{{ url_for('static',filename='css/dropzone.css')}}" rel="stylesheet" type="text/css">
 	<script>
-		 $(document).ready(function() {
-		$('select').material_select();
-		$('.button-collapse').sideNav();
-		$('#dropnav').dropdown({ hover: true, belowOrigin: false });
-		$('#dropbar').dropdown({ hover: false, belowOrigin: false });
-	  });
+		$(document).ready(function() {
+			$('select').material_select();
+			$('.button-collapse').sideNav();
+			$('#dropnav').dropdown({ hover: true, belowOrigin: false });
+			$('#dropbar').dropdown({ hover: false, belowOrigin: false });
+		});
 	</script>
 </head>
 <body>
-{%include 'navbar_sidebar.html'%}
-	<div class="row">
-		<div class="col s12" style="padding-top: 8px;">
-
-			<h4 class="lato-page grey-text text-darken-1" style="display: inline; margin-bottom: 0.8rem; margin-top: 0.8rem;">
+	{%include 'navbar_sidebar.html'%}
+	<div class="container">
+        <!-- Page Content goes here -->
+		<div class="row">
+			<div id="user-title" class="col s12">
+				<h5 class="grey-darken-3 white-text" >
 				Gestisci il tuo account 
-				
-			</h4>
-			<a href="/logout" class="btn-flat waves-effect waves-dark white lighten-5 right" style="padding:0 1rem; margin-top: 7px;"><i class="material-icons" title="Lista movimenti">exit_to_app</i> Log off</a>
-
-			<a href="https://simplebooklet.com/help" target="_blank" class="orange-text right" style="font-size: 1rem; padding-top: 17px; padding-left: 10px; font-weight: 500; margin-right: 10px;">sample text</a>
-
-			<a href="https://simplebooklet.com/quickguidesimplebooklet" target="_blank" class="orange-text right" style="font-size: 1rem; padding-top: 17px; padding-left: 10px; font-weight: 500; margin-right: 10px;">sampl txt</a>
-
-			<a href="https://headwayapp.co/simplebooklet-updates" target="_blank" class="orange-text right CHANGE_THIS" style="font-size: 1rem; padding-top: 17px; padding-left: 10px; font-weight: 500; margin-right: 10px;">dmlp etx<span id="HW_badge_cont" class="HW_visible"><span id="HW_badge" class="HW_visible HW_animated" data-count-unseen="3">3</span></span></a>      
-		</div>
-		<div class="col s12 m6">
-			<div class="card">
-				<div class="card-content white-text">
-			  	  muaschio
+			</h5>
+			</div>
+			<div class="col s12 m4">
+				<div class="card center-align">
+					<div class="card-content white-text center-align">
+						<img class="responsive-img center-align circle" id="userpage-img" src="/images/{{nome}}.jpg">
+						<div class="row">
+						<div class="col s8 m12 offset-s2 pull-m2">
+							<div class="collection grey-darken-3">
+					            <a href="/logout" class="btn-flat waves-effect waves-dark  lighten-5 collection-item"><i class="material-icons">exit_to_app</i> Esci</a>
+					            <a class="collection-item" href="#cambia-avatar">Cambia avatar</a>
+					            <a class="collection-item" href="#!">Cambia password</a>
+					            <a class="collection-item" href="#!">Fai danni</a>
+					        </div>
+				        </div>
+				        </div>&#160
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col s12 m6">
+			<div class="col s12 m8">
+			{%if group==None%}
 			<div class="card">
-				<div class="card-content white-text">
-					muschio
+				<span class="card-title">Novità !</span>
+					<div class="card-content white-text">
+					<p class="flow-text">Sono stati aggiunti i gruppi, ora tu e i tuoi coinquilini farete parte dello stesso gruppo. Tuttavia risulta che tu non sia assegnato a nessun gruppo, non c'è problema: scegline uno dalla lista o creane uno nuovo</p>
+					{%if guppi%}
+					<form action="#">
+						{%for gruppo in gruppi%}
+					    <p>
+					      <input name="group1" type="radio" id="test1" />
+					      <label for="test1">Red</label>
+					    </p>
+					    {%endfor%}
+					  </form>
+					  {%endif%}
+					</div>
 				</div>
+				{%endif%}
+				<div class="card">
+					<div class="card-content white-text">
+					<p class="flow-text">One common flaw we've seen in many frameworks is a lack of support for truly responsive text. While elements on the page resize fluidly, text still resizes on a fixed basis. To ameliorate this problem, for text heavy pages, we've created a class that fluidly scales text size and line-height to optimize readability for the user. Line length stays between 45-80 characters and line height scales to be larger on smaller screens.
+
+						To see Flow Text in action, slowly resize your browser and watch the size of this text body change! muschio!</p>
+					</div>
+				</div>
+				<div class="card small" id="cambia-avatar">
+					<div class="card-content">
+					<span class="card-title white-text">Cambia avatar</span>
+					<div class="row">
+						<div class="col s12 center-align">
+						<form class="dropzone" id="my-awesome-dropzone" method="POST" action="/change-avatar" enctype="multipart/form-data">
+						<script type="text/javascript">
+
+							Dropzone.options.myAwesomeDropzone = {
+								  method:"POST",
+								  paramName: "file", // The name that will be used to transfer the file
+								  maxFilesize: 3,
+								  parallelUploads: 1,
+								  uploadMultiple: false,
+								  maxFiles:1,
+								  acceptedFiles: "image/jpeg,image/png,image/gif",
+								  addRemoveLinks: false,
+								  dictResponseError: 'Errore, controlla che il file rispetti i limiti!',
+								  dictFileTooBig:'File troppo grande',
+								  dictMaxFilesExceeded:'Ricarica la pagina per cambiare di nuovo avatar',
+
+								  init: function() {
+								  	 this.on("error", function(file,errormessage, xhr){
+								  	 	if (!file.accepted) {
+								  	 		setTimeout(function(){
+												this.removeFile(file);
+											}, 2000);
+								  	 		}
+								  	 	});
+								  	 this.on("success", function(file,errormessage, xhr){
+										Materialize.toast('Avatar cambiato con successo', 2500,'',
+											//function(){location.reload()}
+											)
+								  	 });
+								  }
+							}
+							
+						</script>
+						<div class="dz-message" data-dz-message><span><b>Clicca qui</b>  o trascina un immagine per selezionare il nuovo avatar</span>
+						<span style="font-size: 70%;"><br>È consigliata un'immagine quadrata. Massimo 650x650px che non superi i 3MB</span></div>
+							<div class="fallback">
+							    <input name="file" type="file" multiple />
+							</div>
+						</form>
+						</div>
+						</div>
+						</div>
+					</div>
 			</div>
         </div>
-        <div class="col s12 m6">
-          <div class="card">
-            <div class="card-content white-text">
-			  muschio
-            </div>
-          </div>
-        </div>
-      </div>
+    </div>
+
 </body>
