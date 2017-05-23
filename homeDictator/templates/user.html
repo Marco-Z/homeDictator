@@ -23,24 +23,23 @@
 				Gestisci il tuo account 
 			</h5>
 			</div>
-			<div class="col s12 m4">
+			<div class="col s12 m4 l3">
 				<div class="card center-align">
 					<div class="card-content white-text center-align">
 						<img class="responsive-img center-align circle" id="userpage-img" src="/images/{{nome}}.jpg">
 						<div class="row">
-						<div class="col s8 m12 offset-s2 pull-m2">
+						<div class="col s8 m12 offset-s2 ">
 							<div class="collection grey-darken-3">
 					            <a href="/logout" class="btn-flat waves-effect waves-dark  lighten-5 collection-item"><i class="material-icons">exit_to_app</i> Esci</a>
 					            <a class="collection-item" href="#cambia-avatar">Cambia avatar</a>
-					            <a class="collection-item" href="#!">Cambia password</a>
-					            <a class="collection-item" href="#!">Fai danni</a>
+					            <a class="collection-item" href="#cambia-pwd">Cambia password</a>
 					        </div>
 				        </div>
 				        </div>&#160
 					</div>
 				</div>
 			</div>
-			<div class="col s12 m8">
+				<div class="col s12 m8 l9">
 			{%if group==None%}
 			<div class="card">
 				<span class="card-title">Novità !</span>
@@ -59,13 +58,6 @@
 					</div>
 				</div>
 				{%endif%}
-				<div class="card">
-					<div class="card-content white-text">
-					<p class="flow-text">One common flaw we've seen in many frameworks is a lack of support for truly responsive text. While elements on the page resize fluidly, text still resizes on a fixed basis. To ameliorate this problem, for text heavy pages, we've created a class that fluidly scales text size and line-height to optimize readability for the user. Line length stays between 45-80 characters and line height scales to be larger on smaller screens.
-
-						To see Flow Text in action, slowly resize your browser and watch the size of this text body change! muschio!</p>
-					</div>
-				</div>
 				<div class="card small" id="cambia-avatar">
 					<div class="card-content">
 					<span class="card-title white-text">Cambia avatar</span>
@@ -84,8 +76,15 @@
 								  acceptedFiles: "image/jpeg,image/png,image/gif",
 								  addRemoveLinks: false,
 								  dictResponseError: 'Errore, controlla che il file rispetti i limiti!',
-								  dictFileTooBig:'File troppo grande',
+								  dictFileTooBig:'File troppo grande o dimensioni errate',
 								  dictMaxFilesExceeded:'Ricarica la pagina per cambiare di nuovo avatar',
+								  accept: function(file, done) {
+									    file.acceptDimensions = done;
+									    file.rejectDimensions = function() { done("il file ha una dimensione troppo grande"); };
+									    // Of course you could also just put the `done` function in the file
+									    // and call it either with or without error in the `thumbnail` event
+									    // callback, but I think that this is cleaner.
+									  },
 
 								  init: function() {
 								  	 this.on("error", function(file,errormessage, xhr){
@@ -96,10 +95,19 @@
 								  	 		}
 								  	 	});
 								  	 this.on("success", function(file,errormessage, xhr){
-										Materialize.toast('Avatar cambiato con successo', 2500,'',
+										Materialize.toast('Avatar cambiato con successo', 2500,'green',
 											//function(){location.reload()}
 											)
 								  	 });
+								  	 this.on("thumbnail", function(file) {
+     										// Do the dimension checks you want to do
+								      if (file.width > 800 || file.height > 800) {
+								        file.rejectDimensions()
+								      }
+								      else {
+								        file.acceptDimensions();
+								      }
+								    });
 								  }
 							}
 							
@@ -114,6 +122,90 @@
 						</div>
 						</div>
 					</div>
+				<div class="card grey-darken-3 white-text" id="cambia-pwd">
+				<div class="card-content">
+				<span class="card-title">Cambia password</span>
+				<form id="change-pwd-form" name="change-pwd-form" action="">
+				<div class="container">
+					<div class="row">
+						<div class="input-field col s12">
+							<input id="old_password" type="password" required class="validate">
+							<label for="old_password">Password attuale</label>
+						</div>
+						<div class="input-field col s12 l6 suffix">
+							<i class="material-icons tiny" id="visibility1" onmouseup="hidepwd(this.id)" ontouchstart="showpwd(this.id)" ontouchend="hidepwd(this.id)" onmousedown="showpwd(this.id)">visibility</i>
+				          <input id="new_password" type="password" required class="validate" required>
+				          <label for="new_password">Nuova password</label>
+				        </div>
+				        <div class="input-field col s12 l6 suffix">
+				        <i class="material-icons tiny" id="visibility2" onmouseup="hidepwd(this.id)" onmousedown="showpwd(this.id)" ontouchstart="showpwd(this.id)" ontouchend="hidepwd(this.id)">visibility</i>
+				          <input id = "new_password2" type="password" class="validate" required oninput="validatepassword()">
+				          <label for="new_password2">Conferma password</label>
+				        </div>
+				        <button class="btn waves-effect waves-light" type="submit" name="action" id="change-pwd-send">Conferma
+						    <i class="material-icons right" >send</i>
+						</button>
+					</div></div>
+				</form>
+				<script type="text/javascript">
+					function validatepassword() {
+					    var x = document.forms["change-pwd-form"]["new_password"].value;
+					    var y = document.forms["change-pwd-form"]["new_password2"].value;
+					    if (x != y) {
+					        $('#new_password2').addClass('invalid');
+					        $('#new_password2').removeClass('valid');
+					    }
+					    else{
+					    	$('#new_password2').addClass('valid');
+					        $('#new_password2').removeClass('invalid');
+					    }
+					}
+
+
+					$('#change-pwd-form').submit( function(event) {
+						event.preventDefault();
+
+						url= "/changepwd";
+						var posting = $.post( url, { old_password: $('#old_password').val(), new_password: $('#new_password').val() },
+							function( data ) {
+							  if (data['result']==true){
+							  	Materialize.toast("Password cambiata con successo", 2200,"green");
+							  	document.getElementById("change-pwd-form").reset();
+							  	window.location.replace("/user#cambia-pwd")
+							  }
+							  else {
+							  	Materialize.toast("c'è stato  un errore controlla di aver inserito la password corretta", 2200,"red");
+							  }
+							}
+							);
+						
+						});
+
+					function showpwd(obj) {
+					  if(obj=="visibility1"){
+					  	var field = document.getElementById("new_password");
+					  	field.type = "text";
+					  }
+					  else{
+						var field = document.getElementById("new_password2");
+					  	field.type = "text";  	
+					  }
+					}
+
+					function hidepwd(obj) {
+					  if(obj=="visibility1"){
+					  	var field = document.getElementById("new_password");
+					  	field.type = "password";
+					  }
+					  else{
+						var field = document.getElementById("new_password2");
+					  	field.type = "password";  	
+					  }
+					}
+
+				</script>
+				</div>
+				</div>	
 			</div>
         </div>
     </div>

@@ -216,18 +216,25 @@ class db_manager(object):
 			"""
 		res = self.cursor.execute(select_command).fetchall()
 		return res
-	def update_password(self,username,pw):
-	
-		update_command = """
-		UPDATE users
-		SET password = ?
-		WHERE nome = ? ;
-		"""
-		self.cursor.execute(update_command,[generate_password_hash(pw), username])
-		self.connection.commit()
-		return True
-	
-		return False
+	def update_password(self,a_id,old_pword,new_pword):
+		try:
+			select_command = """
+			SELECT  password 
+			FROM users
+			WHERE id = ?
+			"""
+			res=self.cursor.execute(select_command, [a_id]).fetchone()[0]
+			if check_password_hash(res,old_pword):
+				update_command = """
+				UPDATE users
+				SET password = ?
+				WHERE id = ? ;
+				"""
+				self.cursor.execute(update_command,[generate_password_hash(new_pword), a_id])
+				self.connection.commit()
+				return True
+		except:
+			return False
 
 	def insert_user(self, nome, password, is_admin):
 			insert_command = """

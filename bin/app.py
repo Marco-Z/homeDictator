@@ -1,4 +1,4 @@
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response, session, escape, json
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response, session, escape, json, jsonify
 from homeDictator.db import db_manager
 from homeDictator.log import log
 from homeDictator.activity import activity
@@ -230,3 +230,19 @@ def update_avatar():
 	return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
 
+@app.route('/changepwd', methods = ['POST'])
+@login_required
+def changepwd():
+	nome=""
+	a_id=current_user.get_id()
+	try:
+		old_pwd = request.form['old_password']
+		new_pwd= request.form['new_password']
+		res= mydb.update_password(a_id,old_pwd,new_pwd)
+		if not res:
+			raise NameError('fail nel cambiare password')
+
+	except:
+		print('fallito')
+		return jsonify(result=False)
+	return jsonify(result=True)
