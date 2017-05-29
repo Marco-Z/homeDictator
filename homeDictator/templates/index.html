@@ -95,10 +95,10 @@
 							{% for nome in nomi %}
 							<tr class="
 							{% if(nome[1] < 0) %}
-							{{ 'red darken-2' }}
+							{{ 'red darken-2 anim' }}
 							{% endif %}
 							{% if(nome[1] > 0) %}
-							{{ 'green darken-2' }}
+							{{ 'green darken-2 anim' }}
 							{% endif %}
 							">
 							<td>{{ nome[0] }}</td>
@@ -113,8 +113,8 @@
 									  decimal : '.', 
 									  suffix : '€'
 									};
-									var demo = new CountUp("{{nome[0]}}td", 0, {{ "{0:.2f}".format(nome[1]) }}, 2, 1.7, options);
-									demo.start();
+									var animo = new CountUp("{{nome[0]}}td", 0, {{ "{0:.2f}".format(nome[1]) }}, 2, 1.8, options);
+									animo.start();
 								});
 							</script>
 						{% endfor %}

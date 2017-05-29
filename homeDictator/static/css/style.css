@@ -146,3 +146,26 @@ height: 330px !important;
     width: calc(100% - 3rem);
   }
 }
+
+.green.darken-2.anim {
+    background-color: #388E3C !important;
+      animation-name: togreen;
+    animation-duration: 2s;
+  -webkit-animation-fill-mode: forwards; /* Safari 4.0 - 8.0 */
+    animation-fill-mode: forwards;
+}
+.red.darken-2.anim {
+    background-color: #D32F2F !important;
+      animation-name: tored;
+    animation-duration: 2s;
+  -webkit-animation-fill-mode: forwards; /* Safari 4.0 - 8.0 */
+    animation-fill-mode: forwards;
+}
+@keyframes togreen {
+    from {background-color: transparent;}
+    to {background-color: #388E3C;}
+}
+@keyframes tored {
+    from {background-color: transparent;}
+    to {background-color: #F44336;}
+}
