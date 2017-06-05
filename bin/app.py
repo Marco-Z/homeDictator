@@ -1,4 +1,4 @@
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response, session, escape
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response, session, escape, json
 from homeDictator.db import db_manager
 from homeDictator.log import log
 from homeDictator.activity import activity
@@ -94,8 +94,6 @@ def cancella():
 def paga():
 	nome=""
 	try:
-		nome=mydb.get_user_by_id(current_user.get_id())[1]
-		print(nome)
 		nome = request.form['nome']
 		importo = float(request.form['importo'])
 		desc = request.form['descrizione']
@@ -205,8 +203,30 @@ def logout():
 @login_required
 def user_page():
 	nome=None
+	group=None
 	try:
 		nome=mydb.get_user_by_id(current_user.get_id())[1]
+		group=mydb.get_userGroupId(current_user.get_id())
+		gruppi_esistenti= mydb.getGroupsAndComponents()
 	except:
 		pass
-	return render_template('user.html',nome=nome)
+	return render_template('user.html',nome=nome,grup=group)
+
+@app.route("/change-avatar",methods=['POST'])
+@login_required
+def update_avatar():
+	try:
+		for f in request.files:
+			file = request.files[f]	
+			print(file)
+			ok=mydb.change_avatar(file, current_user.get_id())
+			if not ok:
+				raise Exception('error')
+
+	except:
+		return json.dumps({'success':False,"status": "error",'msg': "Error,change file"}), 403, {'ContentType':'application/json'}
+
+	print("%s ha cambiato avatar"%current_user.get_id())
+	return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+

@@ -14,7 +14,7 @@
 	<nav class="grey darken-3">
 		<div class="nav-wrapper">
 			<a href="/" class="brand-logo center"><i class="material-icons left" id="home-dict">home</i>Dictator</a>
-			<a href="#" data-activates="mobile-demo" class="button-collapse">
+			<a href="#" data-activates="mobile-demo" class="button-collapse" id="nav-menu">
 				<i class="material-icons">menu</i>
 			</a>
 			<ul id="nav-mobile" class="left hide-on-med-and-down">
@@ -29,10 +29,10 @@
 			</ul>
 			<ul id="nav-mobile" class="right hide-on-med-and-down white-text">
 				{% if not nome %}
-				<li><a href="#modal1"><i class="material-icons left">perm_identity</i>Login</a></li>
+				<li><a href="#modallogin" id="dropdownuser"><i class="material-icons left">perm_identity</i>Login</a></li>
 			</ul>
 			<!-- Modal Structure -->
-			<div id="modal1" class="modal">
+			<div id="modallogin" class="modal">
 				<span class="card-title">Login</span>
 				{% if error %}
 				<span class="red-text"><strong>Errore:</strong> {{ error }}</span>
@@ -73,15 +73,38 @@
 			<script type="text/javascript">
 				$(document).ready(function(){
 			    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-			    $('.modal').modal();
+			    $('#modallogin').modal();
 			});
 
 		</script>
 		{%else%}
-
-		<li><a href="/user"><img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive"></a></li>
-		<li><a href="/user"><span class="white-text " style="margin-right: 10px;"><b >{{nome}}</b></span></a></li>
+		<ul id='dropdownuserdata' class='dropdown-content white-text grey darken-3'>
+		    <li><a href="/user">Profilo</a></li>
+		    <li class="divider"></li>
+		    <li><a href="/logout"><i class="material-icons">exit_to_app</i> Log-out </a></li>
+		 </ul>
+		<li id="user-nav-button"><!--<img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive"></a>
+		<!-- <a href="/user"><span class="white-text " style="margin-right: 10px;"><b >{{nome}}</b></span></a> -->
+		<a href="/user" class='dropdown-button white-text' id="dropdownuser" data-activates='dropdownuserdata'>
+		<img src="/images/{{nome}}.jpg" id="avatar" class="circle image-responsive">
+		<b style="margin-right: 10px;">{{nome}}</b></a>
+		</li>
 	</ul>
+	<script type="text/javascript">
+				$('.dropdown-button').dropdown({
+					inDuration: 225,
+					outDuration: 200,
+				      constrainWidth: false, // Does not change width of dropdown to that of the activator
+				      hover: true, // Activate on hover
+				      gutter: 0, // Spacing from edge
+				      belowOrigin: true, // Displays dropdown below the button
+				      alignment: 'right', // Displays dropdown with edge aligned to the left of button
+				      stopPropagation: false // Stops event propagation
+				    }
+				  );
+		</script>
+
+
 
 	{% endif %}
 	<ul class="side-nav grey darken-3 white-text" id="mobile-demo">

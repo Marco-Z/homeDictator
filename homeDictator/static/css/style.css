@@ -3,6 +3,15 @@ body{
 	background-attachment: fixed;
 	background-repeat: repeat;
 }
+
+@media only screen and (min-width: 600px){
+
+	.flow-text {
+	    font-size: 1.36rem;
+	}
+
+}
+
 .card {
 	background-color: rgba(0,0,0,.15);
 }
@@ -32,7 +41,7 @@ td{
     font-size: large;
     margin: 0 20px;
 }
-#dropdown1{
+#dropdownuser{
 	width: auto !important;
 }
 @media screen and (max-width: 480px) {
@@ -79,4 +88,20 @@ td{
 }
 .modal .input-field label:not(.label-icon).active {
 	transform: translateY(-50%) !important;
+}
+#user-title{
+	padding-top: 10px !important;
+}
+
+#user-nav-button{
+	display: flex !important;
+}
+@media only screen and (max-width: 600px){
+#userpage-img{
+    max-width: 220px;
+    max-height: 2220px;
+
+}}
+#addform {
+height: 330px !important;
 }
